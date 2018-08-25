@@ -37,7 +37,7 @@
 					$query = "";
 					$listi = true;
 					$row = mysqli_fetch_array($poolsres);
-					echo "<div id='poolnote'><span id='poollist'>Name<div id='ppcount'>Posts</div><div id='poolrate'>Rating</div><div id='pooltags'>Tags</div></span></div>\n";
+					echo "<div id='poolnote'><span id='poollist'>Name<div id='ppcount'>Posts</div><div id='poolrate'>Rating</div></span></div>\n";
 					while($row){
 						if($listi){
 							$css = "pooldisplay";
@@ -65,6 +65,7 @@
 						}
 						
 
+						echo"</span></div>\n";
 						$row = mysqli_fetch_array($poolsres);
 					}
 				}
