@@ -9,6 +9,8 @@ origal code/based on <a href="https://github.com/BlaiseRitchie/minibooru">minibo
     <li> <a href="https://github.com/FFmpeg/FFmpeg">ffmpeg</a> </li>
     <li> <a href="https://secure.php.net/">php 7.2</a> </li>
     <li> <a href="https://github.com/ImageMagick/ImageMagick">imagemagick</a> </li>
+    <li> <a href="http://swftools.org/">imagemagick</a> </li>
+    <li>Mysql</li>
   </ul>
 </div>
 
