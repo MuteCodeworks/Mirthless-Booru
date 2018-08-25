@@ -132,13 +132,7 @@
 			
 			while ( $line = fgets($fh, 1000) ) {
 				echo $line;
-				}
-			/*
-			$theData = fread($fh, 1);
-			fclose($fh);
-			echo $theData;
-			*/
-		
+			}
 		echo "</div>";
 	}
 	elseif($filetype=='mp3'){
