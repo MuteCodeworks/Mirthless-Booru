@@ -46,7 +46,6 @@
 ?>
 <form action="new-pool.php" method="POST" enctype="multipart/form-data">
 	Name:<br /><input id="namebox" name="name" type="text" /><br />
-	Tags:<br /><textarea id="inbox" name="tags" rows="10" cols="40" /></textarea><br />
 	Rating:<br /><input type="radio" name="rating" value="safe">Safe
 	<input type="radio" name="rating" value="questionable">Questionable
 	<input type="radio" name="rating" value="explicit">Explicit
@@ -71,15 +70,9 @@
 			$id = (int) $row['max(poolid)'];
 			
 			$id = $id +1;
-			$postids = "";
+			$postids = " ";
 			
-			$tags = $_POST['tags'].' tagme ';
-			$newa = preg_split('/\s+/', $tags);
-			$newa = array_unique($newa);
-			sort($newa);
-			$tags = implode(" ", $newa);
-			
-			$querypool = "INSERT INTO pools VALUES ( $id , '$poolname' , '$postids' , '$tags' , '$rating' , NOW() , 0 )";
+			$querypool = "INSERT INTO pools VALUES ( $id , '$poolname' , '$postids' , '$rating' , NOW() , 0 )";
 			mysqli_query($link , $querypool) or die(mysqli_error($link));
 			$didit = true;
 		}

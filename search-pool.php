@@ -64,11 +64,7 @@
 							echo "<div id='poolrate' style='color:yellow;'>Q</div>";
 						}
 						
-						$tagsq = mysqli_query($link , "SELECT tags FROM pools WHERE poolid=$row[poolid] LIMIT 6") or die(mysqli_error($link));
-						$tagsarr = mysqli_fetch_array($tagsq);
-						echo "<div id='pooltags'>$tagsarr[tags]</div>";
-						
-						echo"</span></div>\n";
+
 						$row = mysqli_fetch_array($poolsres);
 					}
 				}
