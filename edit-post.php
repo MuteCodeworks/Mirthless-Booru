@@ -98,8 +98,6 @@
 				$newidarr = preg_split('/\s+/', " $id "." $newidara ");
 				$newidstr = implode(" ", $newidarr);
 				$newidstr = preg_replace("/\s\s+/" , " " ," $newidstr ");
-				//debug
-				echo "$newidstr<br />";
 			}
 			elseif($_GET['append']=='remove'){
 				$idarr = mysqli_fetch_array($resultoldids);
@@ -108,8 +106,6 @@
 				$newidarr = preg_split('/\s+/', " $newidara ");
 				$newidstr = implode(" ", $newidarr);
 				$newidstr = preg_replace("/\s\s+/" , " " ,"$newidstr");
-				//debug
-				echo "$newidstr<br />";
 			}
 			else{
 				$idarr = mysqli_fetch_array($resultoldids);
@@ -118,11 +114,7 @@
 				$newidarr = preg_split('/\s+/', " $newidara "." $id ");
 				$newidstr = implode(" ", $newidarr);
 				$newidstr = preg_replace("/\s\s+/" , " " ," $newidstr ");
-				//debug
-				echo "$newidstr<br />";
 			}
-			//debug
-			echo "$_GET[append]<br />";
 			}
 			else{
 				$newidstr = '';
