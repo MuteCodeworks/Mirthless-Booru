@@ -5,7 +5,6 @@
 			<?php
 				include 'config.php';
 				echo "$title";
-				include('./blob_data_as_file_stream.php');
 				include("../../getid3/getid3.php");
 			?>
 		</title>
