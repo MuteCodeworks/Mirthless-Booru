@@ -116,6 +116,7 @@
 							$ThisFileInfo = $getID3->analyze("$imagedir/$new_file_name");
 							$width = $ThisFileInfo['video']['resolution_x'];
 							$height = $ThisFileInfo['video']['resolution_y'];
+							$filethumb = "FlashThumb";
 						}
 						if($ext=='txt'){
 							$filethumb = "TextThumb";
