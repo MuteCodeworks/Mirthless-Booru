@@ -113,14 +113,11 @@
 						}
 						if($ext=='swf'){
 							
-							$dime = shell_exec("swfbbox.exe -b $imagedir/$new_file_name");
-							sleep(1);
-							$dimr = preg_split('/:+/',$dime,3);
-							$dima = preg_split('/x+/',$dimr[1]);
-		
-							$filethumb = "FlashThumb";
-							$width = $dima[0];
-							$height = $dima[1];
+							$getID3 = new getid3;
+							$ThisFileInfo = $getID3->analyze("$imagedir/$new_file_name");
+							$swfdim = $ThisFileInfo['video'];
+							$width = $ThisFileInfo['video']['resolution_x'];
+							$height = $ThisFileInfo['video']['resolution_y'];
 						}
 						if($ext=='txt'){
 							$filethumb = "TextThumb";
