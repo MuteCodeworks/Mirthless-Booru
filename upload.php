@@ -115,7 +115,6 @@
 							
 							$getID3 = new getid3;
 							$ThisFileInfo = $getID3->analyze("$imagedir/$new_file_name");
-							$swfdim = $ThisFileInfo['video'];
 							$width = $ThisFileInfo['video']['resolution_x'];
 							$height = $ThisFileInfo['video']['resolution_y'];
 						}
