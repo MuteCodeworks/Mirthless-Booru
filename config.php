@@ -11,7 +11,7 @@ $thumbdir = "thumbs/";
 // absolute path to booru installation
 $imgck = "";
 
-// getid3 directory
+// getid3 directory for windows?
 $getid3dir = "";
 //
 $stylesheet = "style.css";
