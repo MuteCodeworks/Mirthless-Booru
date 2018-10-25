@@ -3,7 +3,7 @@
 	<head>
 		<title>
 			<?php
-			include 'config.php';
+			include_once 'config.php';
 			if(isset($_GET['id'])) {
 				$id = $_GET['id'];
 				echo "$title - Edit Pool $id";
@@ -28,6 +28,7 @@
 			<div id="navbar">
 				<a href="index.php">Home</a>
 				<a href="search-post.php">Posts</a>
+				<a href="tags.php">Tags</a>
 				<a href="search-pool.php">Pools</a>
 				<a href="upload.php">Upload</a>
 				<a href="about.php">About</a>

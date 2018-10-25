@@ -1,4 +1,4 @@
-<DOCTYPE html>
+<!DOCTYPE html>
 <html>
 	<?php
 	
@@ -22,9 +22,9 @@
 		<div class="bbar">
 			<div class="centerblock">
 				<ul id='bar'>
-					<li><a href="search-pool.php">Pools</a></li>
 					<li><a href="search-post.php">Posts</a></li>
 					<li><a href="tags.php">Tags</a></li>
+					<li><a href="search-pool.php">Pools</a></li>
 					<li><a href="upload.php">Upload</a></li>
 					<li><a href="about.php">About</a></li>
 				</ul>
@@ -34,13 +34,13 @@
 		<div id='imed'>
 		<?php
 			
-			$querydat = "SELECT type , idnum FROM postdata WHERE type NOT LIKE '%swf%' AND type NOT LIKE '%txt%' AND type NOT LIKE '%mp3%' ORDER BY RAND() LIMIT 1";
+			$querydat = "SELECT type , idnum FROM postdata WHERE type NOT LIKE '%swf%' AND type NOT LIKE '%txt%' AND type NOT LIKE '%mp3%' AND type NOT LIKE '%flac%' ORDER BY RAND() LIMIT 1";
 			$resultdata = mysqli_query($link , $querydat) or die(mysqli_error($link));
 			if (!mysqli_num_rows($resultdata)==0) {
 					
 			$displaydat = mysqli_fetch_array($resultdata);
 			
-			$query = "SELECT name FROM posts WHERE idnum=$displaydat[idnum]";
+			$query = "SELECT hash FROM postdata WHERE idnum=$displaydat[idnum]";
 			
 			$result = mysqli_query($link , $query) or die(mysqli_error($link));
 			

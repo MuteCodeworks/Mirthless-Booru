@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
 <head>
 <title>
@@ -29,6 +29,7 @@
   <div id="navbar">
     <a href="index.php">Home</a>
     <a href="search-post.php">Posts</a>
+	<a href="tags.php">Tags</a>
 	<a href="search-pool.php">Pools</a>
     <a href="upload.php">Upload</a>
     <a href="about.php">About</a>
@@ -48,10 +49,15 @@
     echo "Couldn't find image to remove";
   }
   else {
-    $query = "SELECT * FROM `posts` WHERE `idnum` = '$id' LIMIT 1";
+    $query = "SELECT * FROM `postdata` WHERE `idnum` = '$id' LIMIT 1";
     $result = mysqli_query($link , $query) or die(mysqli_error($link));
     $row = mysqli_fetch_array($result);
-	$filename = $row['name'];
+	$dataquery = "SELECT * FROM `postdata` WHERE `idnum` = '$id' LIMIT 1";
+	$datares = mysqli_query($link , $dataquery) or die(mysqli_error($link));
+	$datarow = mysqli_fetch_array($datares);
+	$filename = $row['hash'];
+	$thumbname = $row['thumb'];
+	$filetype = $datarow['type'];
     if(isset($_GET['s'])) {
       if($_GET['s'] != 1) {
         $tags = $row['tag'];
@@ -82,19 +88,29 @@
 			}
 		
 		}
-        $querypost = "DELETE FROM `posts` WHERE `idnum` = '$id' LIMIT 1";
-		$querydata = "DELETE FROM postdata WHERE idnum = '$id' LIMIT 1";
+        $querypost = "DELETE FROM `postdata` WHERE `idnum` = '$id' LIMIT 1";
+		$querydata = "DELETE FROM tagmap WHERE post_id = '$id' LIMIT 1";
         mysqli_query($link , $querypost) or die(mysqli_error($link));
 		mysqli_query($link , $querydata) or die(mysqli_error($link));
 		
         if(!is_writable("$imagedir/$filename"))
           echo "Removed from database, but image file not removed. You should remove it manually from $imagedir/$filename";
         else {
-          if(!unlink("$imagedir/$filename"))
-            echo "Removed from database, but image file not removed. You should remove it manually from $imagedir/$filename";
-          else {
-            echo "Removed successfully. <a href=\"search-post.php?q=\">Click here</a> to return";
-          }
+			if(!$filetype=='swf'){
+				if(!unlink("$imagedir/$filename")or!unlink("$thumbdir/$thumbname"))
+					echo "Removed from database, but image file not removed. You should remove it manually from $imagedir/$filename";
+				else {
+					echo "Removed successfully. <a href=\"search-post.php?q=\">Click here</a> to return";
+				}
+			}
+			else{
+				if(!unlink("$imagedir/$filename")){
+					echo "Removed from database, but image file not removed. You should remove it manually from $imagedir/$filename";
+				}
+				else {
+					echo "Removed successfully. <a href=\"search-post.php?q=\">Click here</a> to return";
+				}
+			}
         }
       }
     }

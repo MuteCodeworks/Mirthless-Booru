@@ -1,22 +1,15 @@
 <?php
-// title displayed at the top of the page
 $title = "";
-
-// content storage file
-$imagedir = "";
-
-// thumbnail file (this shouldnt change)
+$imagedir = "filecachedatabase/";
 $thumbdir = "thumbs/";
-
-// absolute path to booru installation
+//absolute path to booru
 $imgck = "";
-
-// getid3 directory for windows?
-$getid3dir = "";
 //
-$stylesheet = "style.css";
 
-// sql host, database name, user, and password
+$metaterms = array (
+	0 => 'admin',
+);
+$stylesheet = "style.css";
 $mysql_host = "";
 $mysql_database = "";
 $mysql_user = "";

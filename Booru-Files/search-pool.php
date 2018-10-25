@@ -17,12 +17,21 @@
 			<div id="navbar">
 				<a href="index.php">Home</a>
 				<a href="search-post.php">Posts</a>
+				<a href="tags.php">Tags</a>
 				<a href="search-pool.php">Pools</a>
 				<a href="upload.php">Upload</a>
 				<a href="about.php">About</a>
+				<a href="new-pool.php" >New Pool</a>
 			</div>
 		</div>
-		<div id="poolbox">
+			<table class="basic-table" style="width:70%;" >
+			<thead>
+				<tr>
+					<td style="width:35%;">Name</td>
+					<td style="width:5%;">Posts</td>
+					<td style="width:2%;">Rating</td>
+				</tr>
+			</thead>
 			<?php
 				$numpoolsquery = "SELECT COUNT(*) FROM pools ";
 				$query = "SELECT name , poolid , date , postid , rating FROM pools ORDER BY date DESC";
@@ -37,41 +46,30 @@
 					$query = "";
 					$listi = true;
 					$row = mysqli_fetch_array($poolsres);
-					echo "<div id='poolnote'><span id='poollist'>Name<div id='ppcount'>Posts</div><div id='poolrate'>Rating</div></span></div>\n";
 					while($row){
-						if($listi){
-							$css = "pooldisplay";
-							$listi = false;
-						}
-						else{
-							$css = "pooldisplay2";
-							$listi = true;
-						}
 						
-						echo "<div id='$css'><span id='poollist'>";
+						echo "<tr>";
 						
 						$numin = preg_split('/\s+/', $row['postid']);
 						$num = count($numin)-2;
 					
-						echo "<a href=\"view-pool.php?id=$row[poolid]\">$row[name]</a><div id='ppcount'>$num</div>";
+						echo "<td><a href=\"view-pool.php?id=$row[poolid]\">$row[name]</a><td>$num</td>";
 						if($row['rating']=='explicit'){
-							echo "<div id='poolrate' style='color:red;'>E</div>";
+							echo "<td style='color:red;'>E</td>";
 						}
 						elseif($row['rating']=='safe'){
-							echo "<div id='poolrate' style='color:lightgreen;'>S</div>";
+							echo "<td id='poolrate' style='color:lightgreen;'>S</td>";
 						}
 						else{
-							echo "<div id='poolrate' style='color:yellow;'>Q</div>";
+							echo "<td id='poolrate' style='color:yellow;'>Q</td>";
 						}
 						
 
-						echo"</span></div>\n";
+						echo"</tr>\n";
 						$row = mysqli_fetch_array($poolsres);
 					}
 				}
 			?>
-			
-		</div>
-		<a id="newpool" href="new-pool.php" >New Pool</a>
+			</table>
 	</body>
 </html>

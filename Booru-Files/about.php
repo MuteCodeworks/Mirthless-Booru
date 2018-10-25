@@ -16,6 +16,7 @@
 <div id="navbar">
   <a href="index.php">Home</a>
   <a href="search-post.php">Posts</a>
+  <a href="tags.php">Tags</a>
   <a href="search-pool.php">Pools</a>
   <a href="upload.php">Upload</a>
   <a href="about.php">About</a>
@@ -23,7 +24,7 @@
 <?php
   $link = mysqli_connect($mysql_host, $mysql_user, $mysql_password) or die('Could not connect: ' . mysqli_error($link));
   mysqli_select_db($link , $mysql_database) or die('Could not select database');  
-  $result = mysqli_query($link , "SELECT COUNT(*) FROM posts") or die(mysqli_error($link));
+  $result = mysqli_query($link , "SELECT COUNT(*) FROM postdata") or die(mysqli_error($link));
   $numimages = mysqli_fetch_array($result);
   echo "Total Number Of Entries In Database: $numimages[0]\n";
 ?>
