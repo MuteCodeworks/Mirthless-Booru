@@ -12,5 +12,3 @@ origal code/based on <a href="https://github.com/BlaiseRitchie/minibooru">minibo
     <li>Mysql</li>
   </ul>
 </div>
-
-Has unlisted depends, we will update with depends when we can.
