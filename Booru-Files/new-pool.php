@@ -59,7 +59,7 @@
 			$didit = false;
 		}
 		else{
-			$querypool = "INSERT INTO pools VALUES ( pool_id , \"$poolname\" , 0 , NOW() )";
+			$querypool = "INSERT INTO pools VALUES ( pool_id , \"$poolname\" , 0 , NOW(3) )";
 
 			mysqli_query($link , $querypool) or die(mysqli_error($link));
 			$didit = true;
