@@ -4,6 +4,7 @@
 <title>
 <?php
   include 'config.php';
+  include 'functions/map-tags.php';
   if(isset($_GET['id'])) {
     $id = $_GET['id'];
     echo "$title - Remove $id";
@@ -63,15 +64,15 @@
         $tags = $row['tag'];
         echo "Are You Sure You Want To Delete This Post?<br />\n";
         echo "<a href=\"remove.php?id=$filename&s=1\">Yes</a> <a href=\"search-post.php?q=\">No</a><br />\n";
-        echo "<img src=\"$imagedir$filename\" alt=\"$tag\" title=\"$id\"><br />\n";
+        echo "<img src=\"$imagedir/$filename\" alt=\"$tag\" title=\"$id\"><br />\n";
       }
       else {
-		
+
 		$queryisinpool = "SELECT isinpool FROM postdata WHERE idnum=$id";
 		$sqlinpool = mysqli_query($link , $queryisinpool) or die(mysqli_error($link));
 		$inpollarr = mysqli_fetch_array($sqlinpool);
 		if(!$inpollarr['isinpool']==''){
-			
+
 			$poolidarr = preg_split('/\s+/' , $inpollarr['isinpool']);
 			$total = count($poolidarr);
 			for($i = 1; $i < $total -1 ; $i++ ){
@@ -84,20 +85,21 @@
 				$newidstr = preg_replace("/\s\s+/" , " " ,"$newidstr");
 				$poolupdate = "UPDATE pools SET postid = '$newidstr' WHERE poolid = $poolidarr[$i] LIMIT 1";
 				mysqli_query($link , $poolupdate) or die(mysqli_error($link));
-				
+
 			}
-		
+
 		}
-        $querypost = "DELETE FROM `postdata` WHERE `idnum` = '$id' LIMIT 1";
-		$querydata = "DELETE FROM tagmap WHERE post_id = '$id' LIMIT 1";
+    map_tags($id,'$tags',$link,$metaterms,'REMOVE');
+        $querypost = "DELETE FROM `postdata` WHERE `idnum` = '$id' LIMIT 1 ";
+		 $querydata = "DELETE FROM tagmap WHERE post_id = '$id'";
         mysqli_query($link , $querypost) or die(mysqli_error($link));
 		mysqli_query($link , $querydata) or die(mysqli_error($link));
-		
+
         if(!is_writable("$imagedir/$filename"))
           echo "Removed from database, but image file not removed. You should remove it manually from $imagedir/$filename";
         else {
-			if(!$filetype=='swf'){
-				if(!unlink("$imagedir/$filename")or!unlink("$thumbdir/$thumbname"))
+			if($filetype!='swf'&&$filetype!='txt'){
+				if(!unlink("$imagedir/$filename")and!unlink("$thumbdir/$thumbname"))
 					echo "Removed from database, but image file not removed. You should remove it manually from $imagedir/$filename";
 				else {
 					echo "Removed successfully. <a href=\"search-post.php?q=\">Click here</a> to return";
@@ -115,10 +117,10 @@
       }
     }
     else {
-      $tags = $row['tags'];
+    //  $tags = $row['tags'];
       echo "Are You Sure You Want To Delete This Post?<br />\n";
       echo "<a href=\"remove.php?id=$id&s=1\">Yes</a> <a href=\"search-post.php?q=\">No</a><br />\n";
-      echo "<img src=\"$imagedir$filename\" alt=\"$tags\" title=\"$tags\"><br />\n";
+      echo "<img src=\"$imagedir/$filename\" ><br />\n";
     }
   }
 ?>

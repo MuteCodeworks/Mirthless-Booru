@@ -8,8 +8,10 @@
 		mysqli_select_db($link , $mysql_database) or die('Could not select database');
 		if(isset($_GET['id'])) {
 			$id = $_GET['id'];
-			$query = "SELECT * FROM pools WHERE poolid = '$id' LIMIT 1";
+			$query = "SELECT * FROM pools WHERE pool_id = '$id' LIMIT 1";
 			$result = mysqli_query($link , $query) or die(mysqli_error($link));
+			$query = "SELECT post_id , location FROM poolmap WHERE pool_id=$id";
+			$pooldata = mysqli_query($link , $query) or die(mysqli_error($link));
 			if($row = mysqli_fetch_array($result)) {
 				$titleext = $row['name'];
 			}
@@ -41,23 +43,16 @@
 			<div id="poolcontent">
 				<?php
 					echo "<div id='plnme'>$row[name]</div><br />";
-					if($row['postid']!=""){
-						$newa = preg_split('/\s+/', $row['postid']);
-						$total = count($newa);
-						
-						
-					
-						for($i = 1; $i < $total -1 ; $i++ ){
-							
-						
-							$query = "SELECT * FROM postdata WHERE idnum=$newa[$i]";
+					$poolrow = mysqli_fetch_array($pooldata);
+					if(mysqli_num_rows($pooldata)!=0){
+						while($poolrow){
+							$query = "SELECT * FROM postdata WHERE idnum=$poolrow[post_id]";
 							$postq = mysqli_query($link , $query) or die(mysqli_error($link));
 							if (!mysqli_num_rows($postq)==0){
-								
-								//start
 								$row = mysqli_fetch_array($postq);
 								display_post($link,$metaterms, $postq, $row);
 							}
+							$poolrow = mysqli_fetch_array($pooldata);
 						}
 					}
 					else{
@@ -68,9 +63,9 @@
 		</div>
 		<div id="pooledit">
 			<?php
-			
+
 			echo "<a id='controls' href='edit-pool.php?id=$id'>Edit</a>"
-			
+
 			?>
 		</div>
 	</body>

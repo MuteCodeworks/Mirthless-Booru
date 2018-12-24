@@ -50,29 +50,14 @@
 					echo "Couldn't find image to edit\n";
 				}
 				else {
-					
-					if(isset($_GET['childof'])&&$_GET['childof']!="$id"){
-						
-						$query = "SELECT parentof FROM postdata WHERE idnum = '$_GET[childof]' LIMIT 1";
-						$result = mysqli_query($link , $query) or die(mysqli_error($link));
-						if (!mysqli_num_rows($result)==0){
-							
-							$row = mysqli_fetch_array($result);
-							
-							//Put Parser Here
-							
-						}
-						elseif($_GET['childof']==''){
-							
-						}
-						else{
-							
-							echo "Parent ID Does Not Exist";
-						
-						}
-						
-						
-					}
+
+					$query = "SELECT * FROM postdata WHERE idnum = $id LIMIT 1";
+					$result = mysqli_query($link , $query) or die(mysqli_error($link));
+					$data = mysqli_fetch_array($result);
+					$name = $data['hash'];
+					$ext = $data['type'];
+					$thumb_name = $data['thumb'];
+
 					$query = "SELECT * FROM `postdata` WHERE `idnum` = '$id' LIMIT 1";
 					$result = mysqli_query($link , $query) or die(mysqli_error($link));
 					$row = mysqli_fetch_array($result);
@@ -87,89 +72,128 @@
 						if($new==''){
 							$new = "tagme";
 						}
-						
-						
-						
-						if(isset($_GET['poolid'])&&$_GET['poolid']!=''){
-						$pool = $_GET['poolid'];
-						$queryoldids = "SELECT postid FROM pools WHERE poolid = '$pool' LIMIT 1";
-						$queryoldpools = "SELECT isinpool FROM postdata WHERE idnum = '$id' LIMIT 1";
-						$resultoldids = mysqli_query($link , $queryoldids) or die(mysqli_error($link));
-						$resultoldpools = mysqli_query($link , $queryoldpools) or die(mysqli_error($link));
-		
-						if($_GET['append']=='remove'){
-							
-							$oldpoolarr = mysqli_fetch_array($resultoldpools);
-							$oldpat = "/(?:\W|^)(\Q$pool\E)(?:\W|$)/i";
-							$upgradepoolstr = preg_replace($oldpat , ' ' ," $oldpoolarr[isinpool] ");
-							$newpoolarr = preg_split('/\s+/', " $upgradepoolstr ");
-							$newpoolstr = implode(" ", $newpoolarr);
-							$newpoolstr = preg_replace("/\s\s+/" , " " ," $newpoolstr ");
-							echo "$newpoolstr<br />";
-						}
-						else{
-							
-							$oldpoolarr = mysqli_fetch_array($resultoldpools);
-							$oldpat = "/(?:\W|^)(\Q$pool\E)(?:\W|$)/i";
-							$upgradepoolstr = preg_replace($oldpat , ' ' ," $oldpoolarr[isinpool] ");
-							$newpoolarr = preg_split('/\s+/', " $pool "." $upgradepoolstr ");
-							$newpoolstr = implode(" ", $newpoolarr);
-							$newpoolstr = preg_replace("/\s\s+/" , " " ," $newpoolstr ");
-							echo "$newpoolstr<br />";
-						}
-						
-						
-						if (!mysqli_num_rows($resultoldids)==0){
-							if($_GET['append']=='first'){
-								$idarr = mysqli_fetch_array($resultoldids);
-								$reoldpat = "/(?:\W|^)(\Q$id\E)(?:\W|$)/i";
-								$newidara = preg_replace($reoldpat , ' ' ," $idarr[postid] ");
-								$newidarr = preg_split('/\s+/', " $id "." $newidara ");
-								$newidstr = implode(" ", $newidarr);
-								$newidstr = preg_replace("/\s\s+/" , " " ," $newidstr ");
+
+
+
+						if(isset($_GET['pool_id'])&&$_GET['pool_id']!=''){
+							$pool = $_GET['pool_id'];
+							$query = "SELECT post_id , location FROM poolmap WHERE pool_id = $pool ORDER BY location ASC";
+							$poolremap = mysqli_query($link,$query)or die(mysqli_error($link));
+							$poolrow = mysqli_fetch_array($poolremap);
+							$location_array = array();
+							while($poolrow){
+								$location_array[] = $poolrow['post_id'];
+								$poolrow = mysqli_fetch_array($poolremap);
 							}
-							elseif($_GET['append']=='remove'){
-								$idarr = mysqli_fetch_array($resultoldids);
-								$reoldpat = "/(?:\W|^)(\Q$id\E)(?:\W|$)/i";
-								$newidara = preg_replace($reoldpat , ' ' ," $idarr[postid] ");
-								$newidarr = preg_split('/\s+/', " $newidara ");
-								$newidstr = implode(" ", $newidarr);
-								$newidstr = preg_replace("/\s\s+/" , " " ,"$newidstr");
-							}
-								else{
-									$idarr = mysqli_fetch_array($resultoldids);
-									$reoldpat = "/(?:\W|^)(\Q$id\E)(?:\W|$)/i";
-									$newidara = preg_replace($reoldpat , ' ' ," $idarr[postid] ");
-									$newidarr = preg_split('/\s+/', " $newidara "." $id ");
-									$newidstr = implode(" ", $newidarr);
-									$newidstr = preg_replace("/\s\s+/" , " " ," $newidstr ");
+							//$counttmp = mysqli_query($link,"SELECT COUNT(*) FROM poolmap WHERE pool_id = $pool");
+							if(isset($_GET['append'])&&$_GET['append']!=''){
+								if(isset($_GET['append'])&&($_GET['append']=='first'||$_GET['append']=='last')){
+									if($_GET['append']=='first'){
+										array_unshift($location_array,$id);
+										$count = count($location_array);
+										mysqli_query($link,"UPDATE pools SET count = $count WHERE pool_id = $pool")or die(mysqli_error($link));
+										mysqli_query($link,"DELETE FROM poolmap WHERE pool_id = $pool")or die(mysqli_error($link));
+										foreach($location_array as $loc => $post_id){
+											$poolsql = "INSERT INTO poolmap VALUES ( \"$pool:$post_id\" ,$pool , $post_id , $loc )";
+											mysqli_query($link,$poolsql)or die(mysqli_error($link));
+										}
+									}
+									else{
+										$location_array[] = $id;
+										$count = count($location_array);
+										mysqli_query($link,"UPDATE pools SET count = $count WHERE pool_id = $pool")or die(mysqli_error($link));
+										mysqli_query($link,"DELETE FROM poolmap WHERE pool_id = $pool")or die(mysqli_error($link));
+										foreach($location_array as $loc => $post_id){
+											$poolsql = "INSERT INTO poolmap VALUES ( \"$pool:$post_id\" ,$pool , $post_id , $loc )";
+											mysqli_query($link,$poolsql)or die(mysqli_error($link));
+										}
+									}
+								}
+								elseif($_GET['append']=='remove'){
+									if(mysqli_num_rows(mysqli_query($link,"SELECT map_id FROM poolmap WHERE pool_id = $pool AND post_id = $id"))>0){
+										if (in_array($id, $location_array)){
+											unset($location_array[array_search($id,$location_array)]);
+											$location_array = array_values($location_array);
+											$count = count($location_array);
+											mysqli_query($link,"UPDATE pools SET count = $count WHERE pool_id = $pool")or die(mysqli_error($link));
+											mysqli_query($link,"DELETE FROM poolmap WHERE pool_id = $pool")or die(mysqli_error($link));
+											foreach($location_array as $loc => $post_id){
+												$poolsql = "INSERT INTO poolmap VALUES ( \"$pool:$post_id\" ,$pool , $post_id , $loc )";
+												mysqli_query($link,$poolsql)or die(mysqli_error($link));
+												echo "$loc<br />";
+											}
+										}
+										else{
+											echo "Post $id Not Found In Pool $pool<br />";
+										}
+									}
+									else{
+										echo "Post $id Not Found In Pool $pool<br />";
+									}
 									
 								}
+								else{
+									echo "Please Use A Valid append Value";
+								}
 							}
-							else{
-								$newidstr = '';
-							}
-							
-							$poolupdate = "UPDATE pools SET postid = '$newidstr' WHERE poolid = $pool LIMIT 1";
-							$postupdate = "UPDATE postdata SET isinpool = '$newpoolstr' WHERE idnum = $id LIMIT 1";
-							$result = mysqli_query($link , $poolupdate) or die(mysqli_error($link));
-							$result = mysqli_query($link , $postupdate) or die(mysqli_error($link));
 						}
-		
-						$rating = $_GET['rating'];
+
+						if(!isset($_GET['rating'])&&$data['rating']==''){
+							$rating = 'unrated';
+						}
+						else{
+								$rating = $_GET['rating'];
+						}
+
 						map_tags($id , $new , $link , $metaterms , 'EDIT');
 						$querydata = "UPDATE postdata SET rating = '$rating' WHERE idnum = '$id' LIMIT 1";
-	  
+
 						$result = mysqli_query($link , $query) or die(mysqli_error($link));
 						$result = mysqli_query($link , $querydata) or die(mysqli_error($link));
-	  
-	 
-	  
-	  
+
+						if(isset($_GET['rethumb'])&&$_GET['rethumb']!=''){
+							if($ext=='png'or$ext=='jpg'or$ext=='jpeg'or$ext=='jpe'or$ext=='tiff')
+							{
+								$image = new Imagick("$imgck/$imagedir/$name");
+								$image->setImageCompressionQuality(0);
+								$image->stripImage();
+								$image->thumbnailImage(150, 150, true);
+								$image->writeImage("$imgck/$thumbdir/$thumb_name");
+							}
+							elseif($ext=='gif'or$ext=='apng')
+							{
+								exec("ffmpeg -i $imgck/$imagedir/$name -vframes 1 $imgck/$thumbdir/$thumb_name");
+								$image = new Imagick("$imgck/$thumbdir/$thumb_name");
+								$image->setImageCompressionQuality(0);
+								$image->stripImage();
+								$image->thumbnailImage(150, 150, true);
+								$image->writeImage("$imgck/$thumbdir/$thumb_name");
+							}
+							elseif($ext=='mp4'or$ext=='webm')
+							{
+								exec("ffmpeg -ss 00:00:01 -i $imgck/$imagedir/$name -vframes 1 $imgck/$thumbdir/$thumb_name");
+								$image = new Imagick("$imgck/$thumbdir/$thumb_name");
+								$image->setImageCompressionQuality(0);
+								$image->stripImage();
+								$image->thumbnailImage(150, 150, true);
+								$image->writeImage("$imgck/$thumbdir/$thumb_name");
+							}
+							elseif($ext=='mp3'or$ext=='flac'){
+								$getID3 = new getID3;
+								$tags = $getID3->analyze("$imgck/$imagedir/$name");
+								if (isset($tags['comments']['picture']['0']['data'])) {
+									$image = $tags['comments']['picture']['0']['data'];
+									file_put_contents("$imgck/$thumbdir/$thumb_name", $image);
+								}
+							}
+						}
+
+
+
 						echo "<p class='text'> Updated information successfully</p><br />\n";
 					}
 					else {
-						
+
 						$tags = read_tags($link,$metaterms,$id,'EDIT');
 
 						$imgq = "SELECT given_name , hash FROM postdata WHERE idnum=$id";
@@ -177,13 +201,13 @@
 						$imga = mysqli_fetch_array($imgs);
 						$imgf = $imga['hash'];
 						echo "<img id='image' src=\"$imagedir/$imgf\" alt=\"$tags\" title=\"$tags\"><br />\n"
-	
-	  
-	  
-	  
-	  
-	  
-	  
+
+
+
+
+
+
+
 ?>
 <form action="edit-post.php" method="GET">
 Tags:<br /><textarea id="inbox" name="new" rows="10" cols="40">
@@ -194,34 +218,34 @@ Tags:<br /><textarea id="inbox" name="new" rows="10" cols="40">
 	$rresult = mysqli_query($link , $querydata) or die(mysqli_error($link));
 	$rrow = mysqli_fetch_array($rresult);
 	$prating = $rrow['rating'];
-	
+
 ?>
 Rating:<br /><input type="radio" name="rating" value="safe" <?php echo($prating=='safe')?'checked':'' ?> size="19" >Safe
 <input type="radio" name="rating" value="questionable" <?php echo($prating=='questionable')?'checked':'' ?> size="19" >Questionable
 <input type="radio" name="rating" value="explicit" <?php echo($prating=='explicit')?'checked':'' ?> size="19" >Explicit
 <br />
 Make Child Of: <input style="color:black;" name="childof" size="8" type="text" /><br />
-Add To Pool <select name="poolid" style="color:black;">
+Add To Pool <select name="pool_id" style="color:black;">
 <option value="">Select...</option>
 <?php
-	$poolquery = "SELECT name , poolid , postid FROM pools ORDER BY name";
-	$countquery = "SELECT COUNT(poolid) AS total FROM pools WHERE isclosed<=0";
+	$poolquery = "SELECT name , pool_id FROM pools ORDER BY name";
+	$countquery = "SELECT COUNT(pool_id) AS total FROM pools";
 	$countpool = mysqli_query($link , $countquery) or die(mysqli_error($link));
 	$countarr = mysqli_fetch_array($countpool);
 	$listed = $countarr['total'];
 	$poolresult = mysqli_query($link , $poolquery) or die(mysqli_error($link));
 	$poolarr = mysqli_fetch_array($poolresult);
 	$lastname =$poolarr['name'];
-	echo "<option value='$poolarr[poolid]'>$poolarr[name]</option>";
-	
+	echo "<option value='$poolarr[pool_id]'>$poolarr[name]</option>";
+
 	for( $i = 0 ; $i < $listed -1 ; $i++ ){
-		
-		
-			
-		$nquery = "SELECT name , poolid FROM pools WHERE isclosed<=0 AND name>'$lastname' LIMIT 1";
+
+
+
+		$nquery = "SELECT * FROM pools WHERE name>'$lastname' LIMIT 1";
 		$poolresult = mysqli_query($link , $nquery) or die(mysqli_error($link));
 		$poolarr = mysqli_fetch_array($poolresult);
-		echo "<option value='$poolarr[poolid]'>$poolarr[name]</option>";
+		echo "<option value='$poolarr[pool_id]'>$poolarr[name]</option>";
 	}
 ?>
 </select>
@@ -230,8 +254,9 @@ Add To Pool <select name="poolid" style="color:black;">
 <input type="radio" name="append" value="last" size=""19 checked=''>: Place Last
 <input type="radio" name="append" value="remove" size=""19 >: Remove From Pool
 <br />
-
-<input id="uploadbutton" type="submit" value="Update" /> Or 
+Regenerate Thumbnail: <input type="checkbox" name="rethumb" value="rethumb" size=""19 >
+<br />
+<input id="uploadbutton" type="submit" value="Update" /> Or
 <?php
 echo "<a id='deletebutton' href=\"remove.php?id=$id\">Delete</a><br />";
 ?>

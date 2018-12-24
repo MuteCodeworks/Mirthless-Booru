@@ -57,7 +57,7 @@
 				$extdata = "";
 			}
 			
-			echo "<$vidimage src='$imagedir$diplaycon[0]' $extdata type='$contype'>";
+			echo "<$vidimage src='$imagedir/$diplaycon[0]' $extdata type='$contype'>";
 			}
 		?>
 		</div>

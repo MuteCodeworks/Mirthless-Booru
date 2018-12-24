@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<html>
 	<head>
 		<title>
 			<?php
 				include 'config.php';
-				echo "$title";
-				include('./blob_data_as_file_stream.php');
+				echo "$title: new pool";
 			?>
 		</title>
 		<link rel="stylesheet" type="text/css" href="style.css" />
@@ -47,33 +46,21 @@
 ?>
 <form action="new-pool.php" method="POST" enctype="multipart/form-data">
 	Name:<br /><input id="namebox" name="name" type="text" /><br />
-	Rating:<br /><input type="radio" name="rating" value="safe">Safe
-	<input type="radio" name="rating" value="questionable">Questionable
-	<input type="radio" name="rating" value="explicit">Explicit
 	<br /><button id="uploadbutton" type="submit" name="btn-up">Make Pool</button>
 	<!--<input id="uploadbutton" type="submit" value="Upload" /><br />-->
 </form>
 <?php
   }
-	if(isset($_POST['btn-up'])&&isset($_POST['rating'])){
-		
+	if(isset($_POST['btn-up'])) {
+
 		$poolname = $_POST['name'];
 		if($poolname==''){
 			echo "Pool Must Have A Name";
 			$didit = false;
 		}
 		else{
-		
-			$rating = $_POST['rating'];
-			
-			$idcheck = mysqli_query($link , "select max(poolid) from pools ") or die(mysqli_error($link));
-			$row = mysqli_fetch_array($idcheck);
-			$id = (int) $row['max(poolid)'];
-			
-			$id = $id +1;
-			$postids = " ";
-			
-			$querypool = "INSERT INTO pools VALUES ( $id , '$poolname' , '$postids' , '$rating' , NOW() , 0 )";
+			$querypool = "INSERT INTO pools VALUES ( pool_id , \"$poolname\" , 0 , NOW() )";
+
 			mysqli_query($link , $querypool) or die(mysqli_error($link));
 			$didit = true;
 		}
@@ -83,9 +70,6 @@
 	}
 	if($didit){
 		echo "Pool Created Successfully";
-	}
-	if(isset($_POST['btn-up'])&&!isset($_POST['rating'])){
-		echo "Please select a rating";
 	}
 ?>
 </div>

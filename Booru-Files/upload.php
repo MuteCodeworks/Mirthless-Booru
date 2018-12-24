@@ -5,9 +5,11 @@
 			<?php
 				include_once 'config.php';
 				include_once 'functions/map-tags.php';
-				include_once("../../getid3/getid3.php");
+				include_once "$getid3_path";
+				include_once "functions/upload-run.php";
+				include_once "functions/swfheader.class.php";
 				echo "$title";
-				
+
 			?>
 		</title>
 		<link rel="stylesheet" type="text/css" href="style.css" />
@@ -59,145 +61,22 @@
 		<!--<input id="uploadbutton" type="submit" value="Upload" /><br />-->
 	</form>
 	<?php
-	  } 
-		
+	  }
+
 		if(isset($_POST['btn-up'])&&isset($_POST['rating'])){
-			
+
 			$files = array_filter($_FILES['file']);
 			$total = count($_FILES['file']['name']);
 			for($i = 0; $i < $total ; $i++ ){
-				
+
 				$tags = preg_replace("/\s\s+/" , " " , $_POST['tags']." tagme ");
-				$allowed_filetypes = array("jpe" , "gif", "jpg", "jpeg", "png" , "mp4", "webm", "mp3","flac", "swf", "txt");
 				$file = $_FILES['file']['name'][$i];
 				$ext = strtolower(pathinfo($file)['extension']);
+				echo $ext;
 				$rating = $_POST['rating'];
 				$length = "0";
-			
-				if(!in_array($ext, $allowed_filetypes))
-				{
-					echo "Unsupported Filetype .$ext";
-				}
-				else
-				{
-					$newname = $_FILES['file']['name'][$i];
-					
-					$file = md5_file($_FILES['file']['tmp_name'][$i]).".$ext";
-					$filethumb = md5_file($_FILES['file']['tmp_name'][$i]);
-					
-					
-					$result = mysqli_query($link , "SELECT `hash` FROM `postdata` WHERE `hash` = '$file'") or die(mysqli_error($link));
-					if(mysqli_fetch_array($result)){
-						echo "Duplicate file entry detected\n";
-					}
-					else
-					{
-						$file_loc = $_FILES['file']['tmp_name'][$i];
-						$file_size = $_FILES['file']['size'][$i];
-						$file_type = $_FILES['file']['type'][$i];
-						
-						$new_size = $file_size/1024;
-						
-						$new_file_name = strtolower($file);
-						
-						if(move_uploaded_file($file_loc,$imagedir.$new_file_name))
-						{	
-							if($ext=='png'or$ext=='jpeg'or$ext=='gif'or$ext=='jpg'or$ext=='jpe'){
-								$imgsize = getimagesize("$imagedir/$new_file_name");
-								$width = $imgsize[0];
-								$height = $imgsize[1];
-							}
-							if($ext=='swf'){
-								$filethumb = 'FlashThumb';
-								$getID3 = new getid3;
-								$ThisFileInfo = $getID3->analyze("$imagedir/$new_file_name");
-								$swfdim = $ThisFileInfo['video'];
-								$width = $ThisFileInfo['video']['resolution_x'];
-								$height = $ThisFileInfo['video']['resolution_y'];
-							}
-							if($ext=='txt'){
-								$filethumb = "TextThumb";
-								$width = 0;
-								$height = 0;
-							}
-							if($ext=='mp4'or$ext=='webm'){
-								$dime = shell_exec("ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 $imagedir/$new_file_name");
-								sleep(1);
-								$dima = preg_split('/x+/',$dime);
-								$height = $dima[1];
-								$width = $dima[0];
-								if($height>=2200 or $file_size>=1073741824){
-									$tags=" break ";
-								}
-								
-								exec("ffmpeg -i $imagedir/$new_file_name -movflags +faststart -c copy $imagedir/faststart$new_file_name");
-								$tmpname = 'faststart'."$new_file_name";
-								$new_file_name = $tmpname;
-							}
-							if($ext=='mp3'or$ext=='flac'){
-								$height = 0;
-								$width = 0;
-								
-							}
-							$query_new_id = "SELECT MAX(idnum) AS id FROM postdata LIMIT 1";
-							$row = mysqli_fetch_array(mysqli_query($link,$query_new_id));
-							$new_id = $row['id']+1;
-							map_tags($new_id , $tags , $link , $metaterms , 'UPLOAD');
-							$querypost = "INSERT INTO postdata VALUES ( $new_id , NOW() , '$new_file_name' , '$newname' , '$filethumb.png' , '$ext' , $new_size , '$rating' , $height , $width , 0 , ' ' , ' ' , ' ')";
-							mysqli_query($link , $querypost) or die(mysqli_error($link));
-							
-							if($ext=='png'or$ext=='jpg'or$ext=='jpeg'or$ext=='jpe')
-							{
-								$image = new Imagick("$imgck/$imagedir/$new_file_name");
-								$image->setImageCompressionQuality(0);
-								$image->stripImage();
-								$image->thumbnailImage(150, 150, true);
-								$image->writeImage("$imgck/thumbs/$filethumb.png");
-								echo $file_type.' ';
-							}
-							elseif($ext=='gif')
-							{
-								
-								exec("ffmpeg -i $imgck/$imagedir/$new_file_name -vframes 1 $imgck/thumbs/$filethumb.png");
-								$image = new Imagick("$imgck/thumbs/$filethumb.png");
-								$image->setImageCompressionQuality(0);
-								$image->stripImage();
-								$image->thumbnailImage(150, 150, true);
-								$image->writeImage("$imgck/thumbs/$filethumb.png");
-								echo $file_type.' ';
-							}
-							elseif($ext=='mp4'or$ext=='webm')
-							{
-								exec("ffmpeg -ss 00:00:01 -i $imgck/$imagedir/$new_file_name -vframes 1 $imgck/thumbs/$filethumb.png");
-								$image = new Imagick("$imgck/thumbs/$filethumb.png");
-								$image->setImageCompressionQuality(0);
-								$image->stripImage();
-								$image->thumbnailImage(150, 150, true);
-								$image->writeImage("$imgck/thumbs/$filethumb.png");
-								echo $file_type.' ';
-							}
-							elseif($ext=='mp3'or$ext=='flac'){
-								$getID3 = new getID3;
-								$tags = $getID3->analyze("$imgck/$imagedir/$new_file_name");
-								if (isset($tags['comments']['picture']['0']['data'])) {
-										$image = $tags['comments']['picture']['0']['data'];
-										file_put_contents("$imgck/thumbs/$filethumb.png", $image);
-										echo $file_type.' ';
-								}
-							}
-							else{
-								echo $file_type.' ';
-							}
 
-							echo "File uploaded and added to database successfully\n <br />";
-
-						}
-						else
-						{
-							echo "Could not move file to $imagedir or create thumbnail in thumbs/ <br />";
-						}
-					}
-				}
+				upload($link, $metaterms, $file , $ext , $rating, $tags , $imagedir , $thumbdir , $imgck , $allowed_filetypes , $i , 'UPLOAD');
 			}
 		}
 		if(isset($_POST['btn-up'])&&!isset($_POST['rating'])){

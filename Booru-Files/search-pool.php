@@ -34,7 +34,7 @@
 			</thead>
 			<?php
 				$numpoolsquery = "SELECT COUNT(*) FROM pools ";
-				$query = "SELECT name , poolid , date , postid , rating FROM pools ORDER BY date DESC";
+				$query = "SELECT * FROM pools ORDER BY time DESC";
 				$numpoolsres = mysqli_query($link , $numpoolsquery) or die(mysqli_error($link));
 				$numpoolsarr = mysqli_fetch_array($numpoolsres);
 				$numpools = $numpoolsarr[0];
@@ -47,24 +47,11 @@
 					$listi = true;
 					$row = mysqli_fetch_array($poolsres);
 					while($row){
-						
+						//$inpool = mysqli_query($link,"SELECT COUNT(*) AS inpool FROM poolmap WHERE map_id=$row[pool_id]")or die(mysqli_error($link));
+						//$inpool = mysqli_fetch_array($inpool);
 						echo "<tr>";
-						
-						$numin = preg_split('/\s+/', $row['postid']);
-						$num = count($numin)-2;
-					
-						echo "<td><a href=\"view-pool.php?id=$row[poolid]\">$row[name]</a><td>$num</td>";
-						if($row['rating']=='explicit'){
-							echo "<td style='color:red;'>E</td>";
-						}
-						elseif($row['rating']=='safe'){
-							echo "<td id='poolrate' style='color:lightgreen;'>S</td>";
-						}
-						else{
-							echo "<td id='poolrate' style='color:yellow;'>Q</td>";
-						}
-						
-
+						echo "<td><a href='view-pool.php?id=$row[pool_id]' >$row[name]</a></td>";
+						echo "<td>$row[count]</td>";
 						echo"</tr>\n";
 						$row = mysqli_fetch_array($poolsres);
 					}
