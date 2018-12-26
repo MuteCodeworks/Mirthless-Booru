@@ -99,11 +99,6 @@
 							echo "<br />Pool ID: $pool_result[pool_id]<br />";
 							echo "Pool Name: $pool_result[name]<br />";
 							echo "<a id='newpool' href='edit-pool.php?id=$id&del=true'>Delete?</a>";
-							if(isset($_POST['posts'])){
-								echo "<br />BEFORE: $_POST[posts]<br />AFTER :$posts<br />";
-								print_r($posts_array);
-							}
-							echo "<pre>$post_string</pre>";
 						}
 					?>
 				</div>
