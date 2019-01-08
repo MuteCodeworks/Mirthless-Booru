@@ -76,7 +76,7 @@
 				$rating = $_POST['rating'];
 				$length = "0";
 
-				upload($link, $metaterms, $file , $ext , $rating, $tags , $imagedir , $thumbdir , $imgck , $allowed_filetypes , $i , 'UPLOAD');
+				upload($link, $metaterms, $file , $ext , $rating, $tags , $imagedir , $thumbdir , $imgck , $allowed_filetypes , $i , 'UPLOAD' , $dump_type);
 			}
 		}
 		if(isset($_POST['btn-up'])&&!isset($_POST['rating'])){
