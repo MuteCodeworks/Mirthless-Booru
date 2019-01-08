@@ -17,7 +17,7 @@
 				$ext = strtolower(pathinfo("$dump_dir/$file")['extension']);
 				$file_type = $ext;
 				
-				upload($link , $metaterms , $file , $ext , $rating , $tags , $imagedir , $thumbdir , $imgck , $allowed_filetypes , $i , 'DUMP' );
+				upload($link , $metaterms , $file , $ext , $rating , $tags , $imagedir , $thumbdir , $imgck , $allowed_filetypes , $i , 'DUMP' , $dump_type );
 			}
 		}
 	}
