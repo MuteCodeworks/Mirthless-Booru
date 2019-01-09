@@ -15,4 +15,5 @@ $mysql_database = "";
 $mysql_user = "";
 $mysql_password = "";
 $dump_type = "MOVE";//COPY or MOVE
+$dtag_file = "";
 ?>
