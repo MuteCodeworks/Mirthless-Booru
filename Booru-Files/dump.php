@@ -6,7 +6,7 @@
 	$i = 0;
 	$link = mysqli_connect($mysql_host, $mysql_user, $mysql_password) or die('Could not connect: ' . mysqli_error($link));
 	mysqli_select_db($link , $mysql_database) or die('Could not select database');
-	$tags = "tagme file_dump_(admin)";
+	$tags = file_get_contents($dtags_file);
 	$rating = "unrated";
 	$length = "0";
 	foreach(glob("$dump_dir/*",GLOB_ONLYDIR) as $dir){
