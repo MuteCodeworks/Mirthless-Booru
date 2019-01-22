@@ -64,7 +64,7 @@
 					if(isset($_GET['order'])&&$_GET['order']!=''){
 						if($_GET['order']=='post'){
 							//re-work this
-							$order = "(SELECT COUNT(post_id), tag_id FROM(SELECT post_id , tag_id FROM tagmap tm , tags t WHERE tm.tag_id = t.id ) as table_a )";
+							$order = "(SELECT COUNT(post_id) FROM(SELECT post_id , tag_id FROM tagmap tm , tags t WHERE tm.tag_id = t.id ) as table_a )";
 						}
 						if($_GET['order']=='type'){
 							$order = "type";
