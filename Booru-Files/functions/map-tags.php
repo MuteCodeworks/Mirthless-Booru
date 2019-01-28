@@ -82,11 +82,9 @@
 
 
 			for( $i = 0 ; $i < $run ; $i++ ){
-				// Check for if tag is on post, if not add
 				$query = "SELECT id , tag_id FROM tags t , tagmap tm WHERE t.tagfull='$tag_array[$i]' AND tm.tag_id=t.id";
 				$tag_result = mysqli_query($link,$query) or die(mysqli_error($link));
 				$tag_row = mysqli_fetch_array($tag_result);
-				//need to check for remove better
 				if(mysqli_num_rows($tag_result)==0){
 					$query = "SELECT id FROM tags WHERE tagfull='$tag_array[$i]'LIMIT 1";
 					$result_exists = mysqli_query($link,$query) or die(mysqli_error($link));

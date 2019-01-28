@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<html>
 	<head>
 		<title>
 			<?php
@@ -17,7 +17,8 @@
 				}
 			?>
 		</title>
-		<link rel="stylesheet" type="text/css" href="style.css" />
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+		<link rel="stylesheet" type="text/css" href="css/buttons.css" />
 		<link rel="favorite icon" href="favicon.png" />
 	</head>
 	<body class="edit">
@@ -28,19 +29,19 @@
 		<div id="header">
 			<span id="title" style="font-size: 25px; font-weight: bold"><?php echo "$title"; ?></span>
 			<div id="navbar">
-				<a href="index.php">Home</a>
-				<a href="search-post.php">Posts</a>
-				<a href="tags.php">Tags</a>
-				<a href="search-pool.php">Pools</a>
-				<a href="upload.php">Upload</a>
-				<a href="about.php">About</a>
+				<a id='button-dark-2' href="index.php">Home</a>
+				<a id='button-dark-2' href="search-post.php">Posts</a>
+				<a id='button-dark-2' href="tags.php">Tags</a>
+				<a id='button-dark-2' href="search-pool.php">Pools</a>
+				<a id='button-dark-2' href="upload.php">Upload</a>
+				<a id='button-dark-2' href="about.php">About</a>
 			</div>
 		</div>
 		<div id="sidebar">
-			<form action="search.php" method="get">
+			<form action="search-post.php" method="get">
 				<div id="searcharea">
 				<input id="searchbox" name="q" size="22" type="text" /><br />
-				<input id="button" type="submit" value="Search" />
+				<input id="button-dark-2" type="submit" value="Search" />
 				</div>
 			</form>
 		</div>
@@ -85,7 +86,6 @@
 								$location_array[] = $poolrow['post_id'];
 								$poolrow = mysqli_fetch_array($poolremap);
 							}
-							//$counttmp = mysqli_query($link,"SELECT COUNT(*) FROM poolmap WHERE pool_id = $pool");
 							if(isset($_GET['append'])&&$_GET['append']!=''){
 								if(isset($_GET['append'])&&($_GET['append']=='first'||$_GET['append']=='last')){
 									if($_GET['append']=='first'){
@@ -142,7 +142,12 @@
 							$rating = 'unrated';
 						}
 						else{
+							if(isset($_GET['rating'])){
 								$rating = $_GET['rating'];
+							}
+							else{
+								$rating = 'unrated';
+							}
 						}
 
 						map_tags($id , $new , $link , $metaterms , 'EDIT');
@@ -256,9 +261,9 @@ Add To Pool <select name="pool_id" style="color:black;">
 <br />
 Regenerate Thumbnail: <input type="checkbox" name="rethumb" value="rethumb" size=""19 >
 <br />
-<input id="uploadbutton" type="submit" value="Update" /> Or
+<input id="button-light-2" type="submit" value="Update" /> Or
 <?php
-echo "<a id='deletebutton' href=\"remove.php?id=$id\">Delete</a><br />";
+echo "<a id='button-light-2' href=\"remove.php?id=$id\">Delete</a><br />";
 ?>
 
 </form>

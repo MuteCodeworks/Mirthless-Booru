@@ -1,6 +1,6 @@
 <?php
 	include "config.php";
-	function upload( $link , $metaterms , $file , $ext , $rating , $tags , $imagedir , $thumbdir , $imgck , $allowed_filetypes , $i , $runtype , $dump_type ){
+	function upload( $link , $metaterms , $file , $ext , $rating , $tags , $imagedir , $thumbdir , $imgck , $allowed_filetypes , $i , $runtype , $dump_type){
 		if(!in_array($ext, $allowed_filetypes)){
 			echo "Unsupported Filetype .$ext";
 		}

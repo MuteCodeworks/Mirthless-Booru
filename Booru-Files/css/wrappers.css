@@ -1,0 +1,14 @@
+.bbar{
+	width: 100%;
+	background:#102835 ;
+	height:64px;
+	opacity: .75;
+	position: absolute;
+	top: 40%;
+	z-index:2;
+}
+.centerblock{
+	height:28px;
+	margin:18px auto;
+	text-align:center;
+}

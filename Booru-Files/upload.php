@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<html>
 	<head>
 		<title>
 			<?php
@@ -12,7 +12,8 @@
 
 			?>
 		</title>
-		<link rel="stylesheet" type="text/css" href="style.css" />
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+		<link rel="stylesheet" type="text/css" href="css/buttons.css" />
 		<link rel="favorite icon" href="favicon.png" />
 	</head>
 	<body id="upload">
@@ -23,12 +24,12 @@
 		<div id="header">
 			<span id="title" style="font-size: 25px; font-weight: bold"><?php echo "$title"; ?></span>
 			<div id="navbar">
-				<a href="index.php">Home</a>
-				<a href="search-post.php">Posts</a>
-				<a href="tags.php">Tags</a>
-				<a href="search-pool.php">Pools</a>
-				<a href="upload.php">Upload</a>
-				<a href="about.php">About</a>
+				<a id='button-dark-2' href="index.php">Home</a>
+				<a id='button-dark-2' href="search-post.php">Posts</a>
+				<a id='button-dark-2' href="tags.php">Tags</a>
+				<a id='button-dark-2' href="search-pool.php">Pools</a>
+				<a id='button-dark-2' href="upload.php">Upload</a>
+				<a id='button-dark-2' href="about.php">About</a>
 			</div>
 		</div>
 	<div id="sidebar">
@@ -41,7 +42,7 @@
 						echo "value=\"$_GET[q]\"";
 					}
 				?>/><br />
-				<input id="button" type="submit" value="Search" />
+				<input id="button-dark-2" type="submit" value="Search" />
 			</div>
 		</form>
 	</div>
@@ -57,8 +58,7 @@
 		Rating:<br /><input type="radio" name="rating" value="safe">Safe
 			<input type="radio" name="rating" value="questionable">Questionable
 			<input type="radio" name="rating" value="explicit">Explicit
-		<br /><button id="uploadbutton" type="submit" name="btn-up">Upload</button>
-		<!--<input id="uploadbutton" type="submit" value="Upload" /><br />-->
+		<br /><button id="button-light-2" type="submit" name="btn-up">Upload</button>
 	</form>
 	<?php
 	  }
@@ -76,7 +76,7 @@
 				$rating = $_POST['rating'];
 				$length = "0";
 
-				upload($link, $metaterms, $file , $ext , $rating, $tags , $imagedir , $thumbdir , $imgck , $allowed_filetypes , $i , 'UPLOAD' , $dump_type);
+				upload($link, $metaterms, $file , $ext , $rating, $tags , $imagedir , $thumbdir , $imgck , $allowed_filetypes , $i , 'UPLOAD');
 			}
 		}
 		if(isset($_POST['btn-up'])&&!isset($_POST['rating'])){

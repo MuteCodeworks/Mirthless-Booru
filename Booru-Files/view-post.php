@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<html>
 <head>
 <?php
   include_once 'config.php';
@@ -21,7 +21,10 @@
   }
 ?>
 </title>
-<link rel="stylesheet" type="text/css" href="style.css" />
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+<link rel="stylesheet" type="text/css" href="css/buttons.css" />
+<link rel="stylesheet" type="text/css" href="css/tags.css" />
+<link rel="stylesheet" type="text/css" href="css/wrappers.css" />
 <link rel="favorite icon" href="favicon.png" />
 </title>
 </head>
@@ -29,18 +32,16 @@
 <div id="header">
   <span id="title" style="font-size: 25px; font-weight: bold"><?php echo "$title"; ?></span>
   <div id="navbar">
-    <a href="index.php">Home</a>
-    <a href="search-post.php">Posts</a>
-	<a href="tags.php">Tags</a>
-	<a href="search-pool.php">Pools</a>
-    <a href="upload.php">Upload</a>
-    <a href="about.php">About</a>
+    <a id='button-dark-2' href="index.php">Home</a>
+    <a id='button-dark-2' href="search-post.php">Posts</a>
+	<a id='button-dark-2' href="tags.php">Tags</a>
+	<a id='button-dark-2' href="search-pool.php">Pools</a>
+    <a id='button-dark-2' href="upload.php">Upload</a>
+    <a id='button-dark-2' href="about.php">About</a>
   </div>
 </div>
 <div id="sidebar">
 		<?php
-			//this all needs worked on
-
 			$poolcheck = "SELECT ps.name , ps.pool_id FROM pools ps, poolmap pm  WHERE ps.pool_id = pm.pool_id AND pm.post_id = $id";
 			$poolsquery = mysqli_query($link,$poolcheck)or die(mysqli_error($link));
 			$poolsrow = mysqli_fetch_array($poolsquery);
@@ -71,51 +72,15 @@
 					echo " >> ";
 				}
 				echo "</div>";
-				//print_r($tmparr);
 				$poolsrow = mysqli_fetch_array($poolsquery);
 			}
 			$poolcheckquery = mysqli_query($link, $poolcheck) or die(mysqli_error($link));
 			$check = mysqli_fetch_array($poolcheckquery);
-			/*
-			if(!$newa[1]==''){
-				for($i = 1; $i < $total -1 ; $i++ ){
-
-					$nquery = "SELECT name , poolid , postid FROM pools WHERE isclosed<=0 AND poolid = $newa[$i] LIMIT 1";
-					$poolresult = mysqli_query($link , $nquery) or die(mysqli_error($link));
-					if (!mysqli_num_rows($poolresult)==0){
-						echo "<div id='poolnav'>";
-						$poolarr = mysqli_fetch_array($poolresult);
-						echo "<a href='view-pool.php?id=$poolarr[poolid]'>Pool: $poolarr[name]</a><br/ >";
-						$postidarr = preg_split('/\s+/', $poolarr['postid']);
-						$currentarray = array_search($id , $postidarr);
-						$back = $currentarray -1;
-						$forth = $currentarray +1;
-						if(!$postidarr[$back]==''){
-							echo "<a href='view-post.php?id=$postidarr[$back]'> <b><<-</b> </a>";
-						}
-						else{
-							echo " <<- ";
-						}
-						echo " | ";
-						if(!$postidarr[$forth]==''){
-							echo "<a  href='view-post.php?id=$postidarr[$forth]'> <b>->></b> </a>";
-						}
-						else{
-							echo " >> ";
-						}
-						echo "</div>";
-					}
-				}
-			}
-			*/
-
-			// like... ALL of it
-
 		?>
   <form action="search-post.php" method="get">
     <div id="searcharea">
       <input id="searchbox" name="q" size="22" type="text" /><br />
-      <input id="button" type="submit" value="Search" />
+      <input id="button-dark-2" type="submit" value="Search" />
     </div>
   </form>
   <div id="tagbox">

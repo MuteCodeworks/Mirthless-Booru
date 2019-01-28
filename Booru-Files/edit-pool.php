@@ -42,19 +42,20 @@
 			}
 			?>
 		</title>
-		<link rel="stylesheet" type="text/css" href="style.css" />
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+		<link rel="stylesheet" type="text/css" href="css/buttons.css" />
 		<link rel="favorite icon" href="favicon.png" />
 	</head>
 	<body class="edit">
 		<div id="header">
 			<span id="title" style="font-size: 25px; font-weight: bold"><?php echo "$title"; ?></span>
 			<div id="navbar">
-				<a href="index.php">Home</a>
-				<a href="search-post.php">Posts</a>
-				<a href="tags.php">Tags</a>
-				<a href="search-pool.php">Pools</a>
-				<a href="upload.php">Upload</a>
-				<a href="about.php">About</a>
+				<a id='button-dark-2' href="index.php">Home</a>
+				<a id='button-dark-2' href="search-post.php">Posts</a>
+				<a id='button-dark-2' href="tags.php">Tags</a>
+				<a id='button-dark-2' href="search-pool.php">Pools</a>
+				<a id='button-dark-2' href="upload.php">Upload</a>
+				<a id='button-dark-2' href="about.php">About</a>
 			</div>
 		</div>
 		<div>
@@ -63,6 +64,8 @@
 			<div id="poolview">
 				<div id="poolcontent">
 					<?php
+						echo "<div>Pool:$pool_result[name]</div>";
+						echo "<div><a id='button-light-2' href='./view-pool.php?id=$_GET[id]'>Return</a></div><br />";
 						if(isset($_GET['del'])&&$_GET['del']=='true'){
 							$query = "DELETE FROM pools WHERE pool_id=$id";
 							mysqli_query($link,$query)or die(mysqli_error($link));
@@ -93,12 +96,17 @@
 							echo "$post_string</textarea><br />";
 							?>
 							
-							<input id="uploadbutton" type="submit" value="Update" />
+							<input id="button-light-2" type="submit" value="Update" />
 							</form>
 							<?php
 							echo "<br />Pool ID: $pool_result[pool_id]<br />";
 							echo "Pool Name: $pool_result[name]<br />";
 							echo "<a id='newpool' href='edit-pool.php?id=$id&del=true'>Delete?</a>";
+							if(isset($_POST['posts'])){
+								echo "<br />BEFORE: $_POST[posts]<br />AFTER :$posts<br />";
+								print_r($posts_array);
+							}
+							echo "<pre>$post_string</pre>";
 						}
 					?>
 				</div>

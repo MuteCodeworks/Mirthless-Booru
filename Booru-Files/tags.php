@@ -2,7 +2,10 @@
 <html>
 	<head>
 	<link href="sicon2.png" type="image/png" rel="icon">
-	<link rel="stylesheet" type="text/css" href="style.css" />
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
+	<link rel="stylesheet" type="text/css" href="css/buttons.css" />
+	<link rel="stylesheet" type="text/css" href="css/tags.css" />
+	<link rel="stylesheet" type="text/css" href="css/tables.css" />
 	<link rel="favorite icon" href="sicon2.png" />
 	<?php
 		include"config.php";
@@ -15,12 +18,12 @@
 		<div id="header">
 			<span id="title" style="font-size: 25px; font-weight: bold"><?php echo "$title"; ?></span>
 			<div id="navbar">
-				<a href="index.php">Home</a>
-				<a href="search-post.php">Posts</a>
-				<a href="tags.php">Tags</a>
-				<a href="search-pool.php">Pools</a>
-				<a href="upload.php">Upload</a>
-				<a href="about.php">About</a>
+				<a id='button-dark-2' href="index.php">Home</a>
+				<a id='button-dark-2' href="search-post.php">Posts</a>
+				<a id='button-dark-2' href="tags.php">Tags</a>
+				<a id='button-dark-2' href="search-pool.php">Pools</a>
+				<a id='button-dark-2' href="upload.php">Upload</a>
+				<a id='button-dark-2' href="about.php">About</a>
 			</div>
 		</div>
 		<div>
@@ -42,7 +45,7 @@
 						<option value="desc"<?php if(isset($_GET['by'])&&$_GET['by']=='desc'){echo "selected='selected'";} ?>>Descending</option>
 					</select>
 					<br />
-					<input id="uploadbutton" type="submit" value="Search"/>
+					<input id="button-light-2" type="submit" value="Search"/>
 				</form>
 			</div>
 			<table class="basic-table">
@@ -63,7 +66,6 @@
 					}
 					if(isset($_GET['order'])&&$_GET['order']!=''){
 						if($_GET['order']=='post'){
-							//re-work this
 							$order = "(SELECT COUNT(post_id) FROM(SELECT post_id , tag_id FROM tagmap tm , tags t WHERE tm.tag_id = t.id ) as table_a )";
 						}
 						if($_GET['order']=='type'){
@@ -88,7 +90,6 @@
 						$by = "ASC";
 					}
 					$query = "SELECT * FROM tags $search GROUP BY tagfull ORDER BY $order $by";
-					echo "<br />$query<br />";
 					$result = mysqli_query($link,$query) or die(mysqli_error($link));
 					$row = mysqli_fetch_array($result);
 					while($row){

@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html>
-	<?php
+		<head>
+			<?php
+				if(!file_exists('config.php')){
+					header("Location:./install.php");
+				}
+				include "config.php";
 	
-	include "config.php";
+				$link = mysqli_connect($mysql_host, $mysql_user, $mysql_password) or die('Could not connect: ' . mysqli_error($link));
+				mysqli_select_db($link , $mysql_database) or die('Could not select database');
 	
-	$link = mysqli_connect($mysql_host, $mysql_user, $mysql_password) or die('Could not connect: ' . mysqli_error($link));
-	mysqli_select_db($link , $mysql_database) or die('Could not select database');
-	
-	echo
-		"<head>
-			<title>$title</title>
-			<link href='$stylesheet' rel='stylesheet' type='text/css'>
-		</head>";
-		
-	?>
+				echo"<title>$title</title>";
+			?>
+				<link href='css/style.css' rel='stylesheet' type='text/css'>
+				<link href='css/buttons.css' rel='stylesheet' type='text/css'>
+				<link href='css/wrappers.css' rel='stylesheet' type='text/css'>
+		</head>
 	<body>
 		<div class="hanger">
 		<span><?php echo "$title"; ?></span>
@@ -21,13 +23,11 @@
 		
 		<div class="bbar">
 			<div class="centerblock">
-				<ul id='bar'>
-					<li><a href="search-post.php">Posts</a></li>
-					<li><a href="tags.php">Tags</a></li>
-					<li><a href="search-pool.php">Pools</a></li>
-					<li><a href="upload.php">Upload</a></li>
-					<li><a href="about.php">About</a></li>
-				</ul>
+				<a id='button-dark-1' href="search-post.php">Posts</a>
+				<a id='button-dark-1' href="tags.php">Tags</a>
+				<a id='button-dark-1' href="search-pool.php">Pools</a>
+				<a id='button-dark-1' href="upload.php">Upload</a>
+				<a id='button-dark-1' href="about.php">About</a>
 			</div>
 		</div>
 		

@@ -1,0 +1,21 @@
+.basic-table {
+	background:#0d202b;
+	width:40%;
+	border: #0d222d 1px solid;
+	padding:2px 0;
+	border-spacing:0;
+	border-radius:5px;
+	display:block;
+	position:absolute;
+	left:50%;
+	transform:translate(-50%,0);
+}
+.basic-table tbody {
+	background:#102835;
+}
+tr {
+
+}
+.basic-table tbody tr:nth-child(odd) > td {
+	background:#153547;
+}

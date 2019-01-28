@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<html>
 <head>
 <title>
 <?php
@@ -16,7 +16,8 @@
   }
 ?>
 </title>
-<link rel="stylesheet" type="text/css" href="style.css" />
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+<link rel="stylesheet" type="text/css" href="css/buttons.css" />
 <link rel="favorite icon" href="favicon.png" />
 </title>
 </head>
@@ -28,19 +29,19 @@
 <div id="header">
   <span id="title" style="font-size: 25px; font-weight: bold"><?php echo "$title"; ?></span>
   <div id="navbar">
-    <a href="index.php">Home</a>
-    <a href="search-post.php">Posts</a>
-	<a href="tags.php">Tags</a>
-	<a href="search-pool.php">Pools</a>
-    <a href="upload.php">Upload</a>
-    <a href="about.php">About</a>
+    <a id='button-dark-2' href="index.php">Home</a>
+    <a id='button-dark-2' href="search-post.php">Posts</a>
+	<a id='button-dark-2' href="tags.php">Tags</a>
+	<a id='button-dark-2' href="search-pool.php">Pools</a>
+    <a id='button-dark-2' href="upload.php">Upload</a>
+    <a id='button-dark-2' href="about.php">About</a>
   </div>
 </div>
 <div id="sidebar">
   <form action="search.php" method="get">
     <div id="searcharea">
       <input id="searchbox" name="q" size="22" type="text" /><br />
-      <input id="button" type="submit" value="Search" />
+      <input id="button-dark-2" type="submit" value="Search" />
     </div>
   </form>
 </div>
@@ -117,9 +118,8 @@
       }
     }
     else {
-    //  $tags = $row['tags'];
       echo "Are You Sure You Want To Delete This Post?<br />\n";
-      echo "<a href=\"remove.php?id=$id&s=1\">Yes</a> <a href=\"search-post.php?q=\">No</a><br />\n";
+      echo "<a id='button-light-2' href=\"remove.php?id=$id&s=1\">Yes</a> <a id='button-light-2' href=\"search-post.php?q=\">No</a><br />\n";
       echo "<img src=\"$imagedir/$filename\" ><br />\n";
     }
   }

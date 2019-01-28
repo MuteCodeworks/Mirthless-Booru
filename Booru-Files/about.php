@@ -1,25 +1,26 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
-<head>
-<title>
-<?php
-  include 'config.php';
-  echo "$title";
-?>
-</title>
-<link rel="stylesheet" type="text/css" href="style.css" />
-<link rel="favorite icon" href="favicon.png" />
-</title>
-</head>
+<html>
+	<head>
+		<title>
+			<?php
+			  include 'config.php';
+			  echo "$title";
+			?>
+		</title>
+			<link rel="stylesheet" type="text/css" href="css/style.css" />
+			<link rel="stylesheet" type="text/css" href="css/buttons.css" />
+			<link rel="favorite icon" href="favicon.png" />
+		</title>
+	</head>
 <body id="main">
 <h2>About <?php echo "$title"; ?></h2>
 <div id="navbar">
-  <a href="index.php">Home</a>
-  <a href="search-post.php">Posts</a>
-  <a href="tags.php">Tags</a>
-  <a href="search-pool.php">Pools</a>
-  <a href="upload.php">Upload</a>
-  <a href="about.php">About</a>
+  <a id='button-dark-2' href="index.php">Home</a>
+  <a id='button-dark-2' href="search-post.php">Posts</a>
+  <a id='button-dark-2' href="tags.php">Tags</a>
+  <a id='button-dark-2' href="search-pool.php">Pools</a>
+  <a id='button-dark-2' href="upload.php">Upload</a>
+  <a id='button-dark-2' href="about.php">About</a>
 </div><br />
 <?php
   $link = mysqli_connect($mysql_host, $mysql_user, $mysql_password) or die('Could not connect: ' . mysqli_error($link));
