@@ -1,0 +1,23 @@
+#tags {
+	padding-left:4px;
+	color:inherit;
+}
+#tagbox {
+	background:#153547;
+	margin-bottom:6px;
+	border-left:#2c6c8e 6px solid;
+}
+#tagbox a:hover{
+	color:#2c6c8e !important;
+}
+#tagbox > div:hover {
+	border-color:#fff;
+	color:#fff;
+}
+/* template
+.tagtype-#metatag# {
+	color:#color#;
+	border-left:#color# 4px solid;
+	padding-left: 4px;
+}
+*/
