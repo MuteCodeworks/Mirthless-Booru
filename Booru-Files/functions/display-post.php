@@ -10,11 +10,11 @@ function display_post($link , $meta , $result , $row){
 
 	echo "<div id='thumbcon'><span class='thumb'>";
 	
-	if(!file_exists("thumbs/$row[thumb]")&&$type=="mp3"or!file_exists("thumbs/$row[thumb]")&&$type=="flac") {
-	echo "<a href=\"view-post.php?id=$row[idnum]\"><img src=\"thumbs/mp3thumb.png\" alt=\"$tags\" title=\"$tags\">";
+	if(!file_exists("$thumbdir/$row[thumb]")&&$type=="mp3"or!file_exists("$thumbdir/$row[thumb]")&&$type=="flac") {
+	echo "<a href=\"view-post.php?id=$row[idnum]\"><img src=\"$thumbdir/mp3thumb.png\" alt=\"$tags\" title=\"$tags\">";
 	}
 	else {
-	echo "<a href=\"view-post.php?id=$row[idnum]\"><img src=\"thumbs/$row[thumb]\" alt=\"$tags\" title=\"$tags\">";
+	echo "<a href=\"view-post.php?id=$row[idnum]\"><img src=\"$thumbdir/$row[thumb]\" alt=\"$tags\" title=\"$tags\">";
 	}
 	if($type=='gif'or$type=='webm'or$type=='mp4'or$type=='mp3'or$type=='cbz'or$type=='cbr'){
 		echo "<span id='animtag'>$type</span>";
