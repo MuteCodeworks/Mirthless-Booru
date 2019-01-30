@@ -82,7 +82,7 @@
 								$postq = mysqli_query($link , $query) or die(mysqli_error($link));
 								if (!mysqli_num_rows($postq)==0){
 									$row = mysqli_fetch_array($postq);
-									display_post($link,$metaterms, $postq, $row);
+									display_post($link,$metaterms, $postq, $row, $thumbdir);
 								}
 								$pool_map_result = mysqli_fetch_array($query_pool_map);
 							}
