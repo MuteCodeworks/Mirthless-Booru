@@ -88,7 +88,7 @@
 			$row = mysqli_fetch_array($result);
 
 			while($row){
-				$row = display_post($link , $metaterms , $result, $row);
+				$row = display_post($link , $metaterms , $result, $row , $thumbdir);
 			}
 			echo "</div>\n<br /><span id=\"pages\">\n";
 
