@@ -30,7 +30,6 @@
 							echo "Could not make tables<br />";
 						}
 						else{
-							chmod($_POST['pathto'],777);
 							if(!is_dir("./$_POST[storedir]")){
 								if(!mkdir("./$_POST[storedir]")){
 									echo "Could not make $_POST[storedir]<br />";
