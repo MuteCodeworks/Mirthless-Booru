@@ -30,6 +30,12 @@
 							echo "Could not make tables<br />";
 						}
 						else{
+							$os = PHP_OS;
+							if(substr($os,0,3)=='WIN'){
+								chmod($_PATH['pathto'],777);
+							}
+							else{
+							}
 							if(!is_dir("./$_POST[storedir]")){
 								if(!mkdir("./$_POST[storedir]")){
 									echo "Could not make $_POST[storedir]<br />";
@@ -93,6 +99,7 @@
 \$metaterms = array(\n$metastr);
 \$allowed_filetypes = array($typestr);
 \$dump_type = \"$dmpt\";//COPY or MOVE
+\$OS = \"$os\";
 //sql
 \$mysql_host = \"$_POST[sqlhost]\";
 \$mysql_database = \"$_POST[sqldb]\";
