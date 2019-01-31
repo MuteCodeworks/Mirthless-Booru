@@ -76,7 +76,7 @@
 							mysqli_query($link,$query)or die(mysqli_error($link));
 							$query = "DELETE FROM poolmap WHERE pool_id=$id";
 							mysqli_query($link,$query)or die(mysqli_error($link));
-							echo "Pool $pool_result[name] $pool_result[id] Deleted";
+							echo "Pool $pool_result[name] $pool_result[pool_id] Deleted";
 						}
 						else{
 							$post_array = array();
