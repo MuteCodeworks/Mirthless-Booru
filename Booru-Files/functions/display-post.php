@@ -1,5 +1,5 @@
 <?php
-function display_post($link , $meta , $result , $row){
+function display_post($link , $meta , $result , $row ,$thumbdir){
 	include_once 'read-tags.php';
 	$tags = read_tags($link,$meta,$row['idnum'],'SEARCH');
 	$dataquery = "SELECT rating , type FROM postdata WHERE idnum=$row[idnum]";
