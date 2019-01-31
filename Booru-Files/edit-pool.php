@@ -14,10 +14,10 @@
 					$posts = substr($posts,1,strlen($posts)-2);
 					$posts_array = explode(' ',$posts);
 					$count = count($posts_array);
-					mysqli_query($link,"UPDATE pools SET count = $count WHERE pool_id = $id")or die(mysqli_error($link));
 					mysqli_query($link,"DELETE FROM poolmap WHERE pool_id = $id")or die(mysqli_error($link));
 					$passed = array();
-					if($posts_array[0]!=''){
+					if($posts_array[0]){
+						mysqli_query($link,"UPDATE pools SET count = $count WHERE pool_id = $id")or die(mysqli_error($link));
 						foreach($posts_array as $loc => $post_id){
 							if(!in_array($post_id,$passed)){
 								$passed[] = $post_id;
@@ -25,6 +25,9 @@
 								mysqli_query($link,$poolsql)or die(mysqli_error($link));
 							}
 						}
+					}
+					else{
+						mysqli_query($link,"UPDATE pools SET count = 0 WHERE pool_id = $id")or die(mysqli_error($link));
 					}
 				}
 				$query_pool = mysqli_query($link,"SELECT * FROM pools WHERE pool_id = $_GET[id] LIMIT 1");
