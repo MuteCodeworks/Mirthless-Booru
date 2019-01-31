@@ -17,11 +17,13 @@
 					mysqli_query($link,"UPDATE pools SET count = $count WHERE pool_id = $id")or die(mysqli_error($link));
 					mysqli_query($link,"DELETE FROM poolmap WHERE pool_id = $id")or die(mysqli_error($link));
 					$passed = array();
-					foreach($posts_array as $loc => $post_id){
-						if(!in_array($post_id,$passed)){
-							$passed[] = $post_id;
-							$poolsql = "INSERT INTO poolmap VALUES ( \"$id:$post_id\" ,$id , $post_id , $loc )";
-							mysqli_query($link,$poolsql)or die(mysqli_error($link));
+					if($posts_array[0]!=''){
+						foreach($posts_array as $loc => $post_id){
+							if(!in_array($post_id,$passed)){
+								$passed[] = $post_id;
+								$poolsql = "INSERT INTO poolmap VALUES ( \"$id:$post_id\" ,$id , $post_id , $loc )";
+								mysqli_query($link,$poolsql)or die(mysqli_error($link));
+							}
 						}
 					}
 				}
