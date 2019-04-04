@@ -64,6 +64,6 @@
 		
 	</body>
 	<footer>
-		<p>Running Mirthless Booru</p>
+		<p><a href="https://github.com/MuteCodeworks/Mirthless-Booru/">Running Mirthless Booru</a></p>
 	</footer>
 </html>
