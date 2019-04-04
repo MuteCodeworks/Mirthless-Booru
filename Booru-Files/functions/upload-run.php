@@ -6,7 +6,7 @@
 		}
 		else{
 
-			$thumb_name = hash('SHA3-256',$file);
+			$thumb_name = hash_file('SHA3-256',$file);
 			$name = $thumb_name.".$ext";
 
 			echo "<br />$name<br />";
