@@ -125,13 +125,13 @@
 	elseif($filetype=='mp3'or$filetype=='flac'){
 		echo "<div id='mp3wrapper'>";
 		echo "<div id=nametext>$row[given_name]</div>";
-		if(file_exists("$thumbdir$filethumb")){
-			echo "<img id='audioim' src='$thumbdir$filethumb'><br />\n";
+		if(file_exists("$thumbdir/$filethumb")){
+			echo "<img id='audioim' src='$thumbdir/$filethumb'><br />\n";
 		}
 		else{
 			echo "<img id='audioim' style='width:602px;' src='$thumbdir/mp3thumb.png'><br />\n";
 		}
-		echo "<audio id='audiopl' controls><source src=\"$imagedir$filename\" type='audio/mp3'></audio>\n";
+		echo "<audio id='audiopl' controls><source src=\"$imagedir/$filename\" type='audio/mp3'></audio>\n";
 		echo "</div>";
 	}
 	else {
