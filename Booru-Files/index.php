@@ -31,7 +31,7 @@
 			</div>
 		</div>
 		
-		<div id='imed'>
+		<div id='index-container'>
 		<?php
 			
 			$querydat = "SELECT type , idnum FROM postdata WHERE type NOT LIKE '%swf%' AND type NOT LIKE '%txt%' AND type NOT LIKE '%mp3%' AND type NOT LIKE '%flac%' ORDER BY RAND() LIMIT 1";
@@ -64,6 +64,6 @@
 		
 	</body>
 	<footer>
-		<p><a href="https://github.com/MuteCodeworks/Mirthless-Booru/">Running Mirthless Booru</a></p>
+		<p style="font-size:8px;">Running Mirthless Booru</p>
 	</footer>
 </html>

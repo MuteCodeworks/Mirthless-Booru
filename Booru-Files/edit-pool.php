@@ -64,8 +64,6 @@
 			</div>
 		</div>
 		<div>
-			<div id="divider">
-			</div>
 			<div id="poolview">
 				<div id="poolcontent">
 					<?php
@@ -80,9 +78,9 @@
 						}
 						else{
 							$post_array = array();
+							$post_string = '';
 							while($pool_map_result){
 								$post_array[] = $pool_map_result['post_id'];
-								$post_string = '';
 								$query = "SELECT * FROM postdata WHERE idnum=$pool_map_result[post_id]";
 								$postq = mysqli_query($link , $query) or die(mysqli_error($link));
 								if (!mysqli_num_rows($postq)==0){
@@ -92,7 +90,7 @@
 								$pool_map_result = mysqli_fetch_array($query_pool_map);
 							}
 							echo "<form action='edit-pool.php?id=$id' method='POST'>";
-							echo "<div>Posts<br /><textarea id='inbox' name='posts' rows='10' cols='40'>";
+							echo "<div>Posts<br /><textarea name='posts' rows='10' cols='40'>";
 							foreach($post_array as $post){
 								$post_string.=" $post ";
 							}

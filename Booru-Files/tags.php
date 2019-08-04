@@ -8,7 +8,9 @@
 	<link rel="stylesheet" type="text/css" href="css/tables.css" />
 	<link rel="favorite icon" href="sicon2.png" />
 	<?php
+		$maxperpage = 40;
 		include"config.php";
+		include"./functions/page-navigate.php";
 		$link = mysqli_connect($mysql_host, $mysql_user, $mysql_password) or die('Could not connect: ' . mysqli_error($link));
 		mysqli_select_db($link , $mysql_database) or die('Could not select database');
 		echo"<title>$title - Tags</title>";
@@ -57,9 +59,16 @@
 					</tr>
 				</thead>
 				<?php
-					
+					if(isset($_GET['p'])){
+						$page = $_GET['p'];
+						$query_limit = ($page-1) * $maxperpage;
+					}
+					else{
+						$page = 1;
+						$query_limit = 0;
+					}
 					if(isset($_GET['q'])&&$_GET['q']!=''){
-						$search = "WHERE tagalias LIKE '$_GET[q]%'";
+						$search = "WHERE tagalias LIKE '%$_GET[q]%'";
 					}
 					else{
 						$search = '';
@@ -90,11 +99,20 @@
 						$by = "ASC";
 					}
 					$query = "SELECT * FROM tags $search GROUP BY tagfull ORDER BY $order $by";
+					$qtagnum = mysqli_query($link,"SELECT COUNT(*) FROM($query) as table_#")or die(mysqli_error($link));
+					$que_tag_num = mysqli_fetch_array($qtagnum);
+					#echo " $que_tag_num[0] ";
+					
+					$maxlimit = $query_limit + $maxperpage;
+					$query .= " LIMIT $query_limit , 40";
+					#echo "| $query |";
+					
 					$result = mysqli_query($link,$query) or die(mysqli_error($link));
 					$row = mysqli_fetch_array($result);
+					
 					while($row){
 						echo "<tr>";
-						$query_num = "SELECT COUNT(*) FROM(SELECT post_id FROM tagmap tm , tags t WHERE tm.tag_id = t.id AND t.tagfull = \"$row[tagfull]\" GROUP BY post_id ) as table_#";
+						$query_num = "SELECT COUNT(*) FROM(SELECT post_id FROM tagmap tm , tags t WHERE tm.tag_id = t.id AND t.tagfull = '". str_ireplace("'","''",$row['tagfull'])."' GROUP BY post_id ) as table_#";
 						$num_result = mysqli_query($link,$query_num) or die(mysqli_error($link));
 						$num_used = mysqli_fetch_array($num_result);
 						
@@ -104,8 +122,19 @@
 						$row = mysqli_fetch_array($result);
 						echo "</tr>";
 					}
+					
+					
 				?>
 			</table>
+		</div>
+		<div id="pages" style="position:absolute;">
+			<?php
+				$numpages = ceil($que_tag_num[0] / $maxperpage);
+				if($numpages != 0){
+					$pass = array('current_page' => $page, 'php' => 'tags.php', 'max_page' => $numpages, 'get' => $_GET,);
+					page_navigate( $pass );
+				}
+			?>
 		</div>
 	</body>
 </html>

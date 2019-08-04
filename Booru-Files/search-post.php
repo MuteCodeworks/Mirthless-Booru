@@ -3,7 +3,7 @@
 	<head>
 		<title>
 			<?php
-
+			$starttime = microtime(true);
 			include 'config.php';
 			include 'functions/display-post.php';
 			include 'functions/search.php';
@@ -23,7 +23,6 @@
 	</head>
 	<body class="search">
 		<?php
-		error_reporting(E_ALL);
 		$link = mysqli_connect($mysql_host, $mysql_user, $mysql_password) or die('Could not connect: ' . mysqli_error($link));
 		mysqli_select_db($link , $mysql_database) or die('Could not select database');
 		?>
@@ -56,40 +55,37 @@
 	<div id="content">
 		<?php
 
-		if(isset($_GET['q'])&&$_GET['q']!=''){
-			$query = search($_GET['q'],'TAG');
-			$query = "SELECT idnum , thumb , hash FROM postdata db , tagmap tm , tags t WHERE tm.tag_id = t.id AND db.idnum = tm.post_id GROUP BY db.idnum HAVING " . $query;
-			$numimagesquery = "SELECT COUNT(*) FROM( " . $query.") as table_#";
-		}
-		else{
-			$query = "SELECT idnum ,thumb , hash FROM postdata ";
-			$numimagesquery = "SELECT COUNT(*) FROM postdata";
-		}
-		$query .= "ORDER BY date DESC ";
-
 		if(isset($_GET['p'])){
 			$page = $_GET['p'];
-			$query_limit = ($page-1) * $post_limit;
+			$max_post = ($page-1) * $post_limit;
 		}
 		else{
 			$page = 1;
-			$query_limit = 0;
+			$max_post = 0;
 		}
-		$query .= "LIMIT $query_limit , $post_limit ";
-		$numimagesres = mysqli_query($link , $numimagesquery) or die(mysqli_error($link));
-		$numimagesarr = mysqli_fetch_array($numimagesres);
-		$numimages = $numimagesarr[0];
+		if(isset($_GET['q'])&&$_GET['q']!=''){
+			$query = search($_GET['q'],'TAG',$link,$metaterms);
+			rsort($query);
+		}
+		else{
+			$query = search('','TAG',$link,$metaterms);
+			rsort($query);
+		}
+		$numimages = count($query);
+		#echo "$numimages";
+		#print_r($query);
 		if($numimages == 0){
 			echo "<h2>Sorry! Nothing tagged with your search terms!</h2>\n";
 		}
 		else{
 			echo "\n<br />\n<div id=\"thumbs\">\n";
-			$result = mysqli_query($link , $query) or die(mysqli_error($link));
-			$row = mysqli_fetch_array($result);
-
-			while($row){
-				$row = display_post($link , $metaterms , $result, $row , $thumbdir);
+			$pagecontents = '';
+			for( $i = $max_post ; $i < ($max_post+$post_limit) ; $i++ ){
+				if(array_key_exists($i,$query)){
+					$pagecontents .= display_post($link , $metaterms , $query[$i] , $thumbdir);
+				}
 			}
+			echo $pagecontents;
 			echo "</div>\n<br /><span id=\"pages\">\n";
 
 
@@ -98,8 +94,13 @@
 				$pass = array('current_page' => $page, 'php' => 'search-post.php', 'max_page' => $numpages, 'get' => $_GET,);
 				page_navigate( $pass );
 			}
-		echo "</span>";
+			echo "</span>";
 		}
+		$endtime = microtime(true);
+		$timediff = $endtime - $starttime;
+		$timediff = number_format($timediff, 2, '.', '');
+		
+		echo "<div style='font-size:8px;display:block;position:relative;bottom:10px;'>Page Generated in $timediff Seconds</div>";
 		?>
 		</div>
 	</body>

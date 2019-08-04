@@ -52,8 +52,6 @@
 				<a id='button-dark-2' href="about.php">About</a>
 			</div>
 		</div>
-		<div id="divider">
-		</div>
 		<div id="poolview">
 			<div id="poolcontent">
 				<?php

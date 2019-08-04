@@ -46,7 +46,7 @@
 	if(!isset($_POST['name'])){
 ?>
 <form action="new-pool.php" method="POST" enctype="multipart/form-data">
-	Name:<br /><input id="namebox" name="name" type="text" /><br />
+	Name:<br /><input name="name" type="text" /><br />
 	<br /><button id="button-light-2" type="submit" name="btn-up">Make Pool</button>
 </form>
 <?php

@@ -54,7 +54,8 @@
 	<form action="upload.php" method="POST" enctype="multipart/form-data">
 		Note: Uploading Multiple Files May Require Editing Tags And Rating Individualy<br />
 		File: <input name="file[]" type="file" multiple="multiple"/><br />
-		Tags:<br /><textarea id="inbox" name="tags" rows="10" cols="40" /></textarea><br />
+		Tags:<br /><textarea name="tags" rows="10" cols="40" /></textarea><br/>
+		Description:<br/><textarea name="desc" rows="10" cols="40"/></textarea><br/>
 		Rating:<br /><input type="radio" name="rating" value="safe">Safe
 			<input type="radio" name="rating" value="questionable">Questionable
 			<input type="radio" name="rating" value="explicit">Explicit
@@ -62,21 +63,22 @@
 	</form>
 	<?php
 	  }
-
+		$check = array('<b>','</b>','<i>','</i>','<br />','	','    ',"\n","\r\n");
+		$sub = array('[b]','[/b]','[i]','[/i]','[br]','[t]','[t]','[br]','[br]');
 		if(isset($_POST['btn-up'])&&isset($_POST['rating'])){
 
-			$files = array_filter($_FILES['file']);
 			$total = count($_FILES['file']['name']);
 			for($i = 0; $i < $total ; $i++ ){
-
-				$tags = preg_replace("/\s\s+/" , " " , $_POST['tags']." tagme ");
+				
+				$desc = str_ireplace($check,$sub,$_POST['desc']);
+				$tags = preg_replace("/\s\s+/" , " " , $_POST['tags']);
 				$file = $_FILES['file']['name'][$i];
 				$ext = strtolower(pathinfo($file)['extension']);
-				echo $ext;
 				$rating = $_POST['rating'];
-				$length = "0";
-
-				upload($link, $metaterms, $file , $ext , $rating, $tags , $imagedir , $thumbdir , $imgck , $allowed_filetypes , $i , 'UPLOAD', $dump_type);
+				
+				if(upload($link, $metaterms, $file , $ext , $rating, "$tags" ,$desc, $imagedir , $thumbdir , $imgck , $allowed_filetypes , $i , 'UPLOAD', $dump_type)){
+					echo "File Successfully Uploaded to Server";
+				}
 			}
 		}
 		if(isset($_POST['btn-up'])&&!isset($_POST['rating'])){

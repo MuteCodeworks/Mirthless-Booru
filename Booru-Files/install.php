@@ -7,6 +7,7 @@
 			$supported_filetypes = array("jpe", "jpeg", "jpg", "png", "tiff", "gif", "apng", "mp4", "webm", "flac", "mp3", "swf", "txt",);
 			$varcheckarr = array("sqlhost", "sqldb", "sqlusr", "sitename", "storedir", "thumbdir", "getidpath", "pathto",);
 			$tables = array("CREATE TABLE poolmap ( map_id TEXT NOT NULL,pool_id INT NOT NULL,post_id INT NOT NULL,location INT NOT NULL)","CREATE TABLE pools (pool_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,name TEXT NOT NULL,count INT NULL,time DATETIME(3) NOT NULL)","CREATE TABLE postdata (idnum INT NOT NULL AUTO_INCREMENT PRIMARY KEY,date DATETIME(3) NOT NULL,hash TEXT NOT NULL,given_name TEXT NOT NULL,thumb TEXT NOT NULL,type TEXT NOT NULL,size DOUBLE NOT NULL,rating TEXT NOT NULL,height INT NOT NULL,width INT NULL,ishidden TINYINT NOT NULL,parentof TEXT NOT NULL,childto TEXT NOT NULL,isinpool TEXT NOT NULL)","CREATE TABLE tagmap (map_id TEXT NOT NULL,post_id INT NOT NULL,tag_id INT NOT NULL)","CREATE TABLE tags (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,type TEXT NOT NULL,tagfull TEXT NOT NULL,tagalias TEXT NOT NULL)",);
+			$index = array("ALTER TABLE `postdata` ADD INDEX (`date`)","ALTER TABLE `postdata` ADD FULLTEXT (hash)","ALTER TABLE `postdata` ADD FULLTEXT (type)","ALTER TABLE `postdata` ADD FULLTEXT (rating)","ALTER TABLE `postdata` ADD INDEX (height)","ALTER TABLE `postdata` ADD INDEX (width)","ALTER TABLE `tagmap` ADD INDEX (post_id)","ALTER TABLE `tagmap` ADD INDEX (tag_id)","ALTER TABLE `tags` ADD FULLTEXT (tagfull)","ALTER TABLE `tags` ADD FULLTEXT (tagalias)",);
 			foreach($varcheckarr as $check){
 				if(!isset($_POST["$check"])){
 					$passedcheck = false;
@@ -30,6 +31,9 @@
 							echo "Could not make tables<br />";
 						}
 						else{
+							foreach($index as $mkindex){
+								mysqli_query($link,$mkindex)or die(mysqli_error($link));
+							}
 							$os = PHP_OS;
 							if(substr($os,0,3)=='WIN'){
 								chmod($_PATH['pathto'],777);

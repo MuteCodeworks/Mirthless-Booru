@@ -10,24 +10,15 @@
 	$rating = "unrated";
 	$length = "0";
 	foreach(glob("$dump_dir/*",GLOB_ONLYDIR) as $dir){
-		foreach($allowed_filetypes as $end){
-			foreach(glob("$dir/*.$end") as $file){
-				echo "$file<br />";
-				$ext = strtolower(pathinfo("$dump_dir/$file")['extension']);
-				$file_type = $ext;
-				
-				upload($link , $metaterms , $file , $ext , $rating , $tags , $imagedir , $thumbdir , $imgck , $allowed_filetypes , $i , 'DUMP' , $dump_type );
-			}
-		}
-	}
-	foreach($allowed_filetypes as $end){
-		foreach(glob("$dump_dir/*.$end") as $file){
+		foreach(array_filter(glob("$dir/*.$end"), 'is_file') as $file){
 			echo "$file<br />";
 			$ext = strtolower(pathinfo("$dump_dir/$file")['extension']);
-			$file_type = $ext;
-		
-			upload($link , $metaterms , $file , $ext , $rating , $tags , $imagedir , $thumbdir , $imgck , $allowed_filetypes , $i , 'DUMP' , $dump_type );
+			upload($link , $metaterms , $file , $ext , $rating , "$tags $dir" ,'', $imagedir , $thumbdir , $imgck , $allowed_filetypes , $i , 'DUMP' , $dump_type );
 		}
 	}
-		
+	foreach(array_filter(glob("$dir/*.$end"), 'is_file') as $file){
+		echo "$file<br />";
+		$ext = strtolower(pathinfo("$dump_dir/$file")['extension']);
+		upload($link , $metaterms , $file , $ext , $rating , $tags ,'', $imagedir , $thumbdir , $imgck , $allowed_filetypes , $i , 'DUMP' , $dump_type );
+	}
 ?>

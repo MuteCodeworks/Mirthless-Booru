@@ -11,6 +11,11 @@
 					echo "$title - Edit $id";
 					$noid = 0;
 				}
+				elseif(isset($_POST['id'])){
+					$id = $_POST['id'];
+					echo "$title - Edit $id";
+					$noid = 0;
+				}
 				else {
 				echo "$title - Not found";
 				$noid = 1;
@@ -62,8 +67,8 @@
 					$query = "SELECT * FROM `postdata` WHERE `idnum` = '$id' LIMIT 1";
 					$result = mysqli_query($link , $query) or die(mysqli_error($link));
 					$row = mysqli_fetch_array($result);
-					if(isset($_GET['new'])) {
-						$newu = $_GET['new'];
+					if(isset($_POST['new'])) {
+						$newu = $_POST['new'];
 						$newu = preg_replace('/\s\s+/',' '," $newu ");
 						$newu = $newu = substr($newu, 1, strlen($newu) - 1);
 						$newa = preg_split('/\s+/', $newu);
@@ -76,8 +81,8 @@
 
 
 
-						if(isset($_GET['pool_id'])&&$_GET['pool_id']!=''){
-							$pool = $_GET['pool_id'];
+						if(isset($_POST['pool_id'])&&$_POST['pool_id']!=''){
+							$pool = $_POST['pool_id'];
 							$query = "SELECT post_id , location FROM poolmap WHERE pool_id = $pool ORDER BY location ASC";
 							$poolremap = mysqli_query($link,$query)or die(mysqli_error($link));
 							$poolrow = mysqli_fetch_array($poolremap);
@@ -86,9 +91,9 @@
 								$location_array[] = $poolrow['post_id'];
 								$poolrow = mysqli_fetch_array($poolremap);
 							}
-							if(isset($_GET['append'])&&$_GET['append']!=''){
-								if(isset($_GET['append'])&&($_GET['append']=='first'||$_GET['append']=='last')){
-									if($_GET['append']=='first'){
+							if(isset($_POST['append'])&&$_POST['append']!=''){
+								if(isset($_POST['append'])&&($_POST['append']=='first'||$_POST['append']=='last')){
+									if($_POST['append']=='first'){
 										array_unshift($location_array,$id);
 										$count = count($location_array);
 										mysqli_query($link,"UPDATE pools SET count = $count WHERE pool_id = $pool")or die(mysqli_error($link));
@@ -109,7 +114,7 @@
 										}
 									}
 								}
-								elseif($_GET['append']=='remove'){
+								elseif($_POST['append']=='remove'){
 									if(mysqli_num_rows(mysqli_query($link,"SELECT map_id FROM poolmap WHERE pool_id = $pool AND post_id = $id"))>0){
 										if (in_array($id, $location_array)){
 											unset($location_array[array_search($id,$location_array)]);
@@ -138,25 +143,28 @@
 							}
 						}
 
-						if(!isset($_GET['rating'])&&$data['rating']==''){
+						if(!isset($_POST['rating'])&&$data['rating']==''){
 							$rating = 'unrated';
 						}
 						else{
-							if(isset($_GET['rating'])){
-								$rating = $_GET['rating'];
+							if(isset($_POST['rating'])){
+								$rating = $_POST['rating'];
 							}
 							else{
 								$rating = 'unrated';
 							}
 						}
-
-						map_tags($id , $new , $link , $metaterms , 'EDIT');
+						$tagscheck = read_tags($link,$metaterms,$id,'EDIT');
+						if($new!=$tagscheck){
+							map_tags($id , $new , $link , $metaterms , 'EDIT');
+						}
+						
 						$querydata = "UPDATE postdata SET rating = '$rating' WHERE idnum = '$id' LIMIT 1";
 
 						$result = mysqli_query($link , $query) or die(mysqli_error($link));
 						$result = mysqli_query($link , $querydata) or die(mysqli_error($link));
 
-						if(isset($_GET['rethumb'])&&$_GET['rethumb']!=''){
+						if(isset($_POST['rethumb'])&&$_POST['rethumb']!=''){
 							if($ext=='png'or$ext=='jpg'or$ext=='jpeg'or$ext=='jpe'or$ext=='tiff')
 							{
 								$image = new Imagick("$imgck/$imagedir/$name");
@@ -176,7 +184,7 @@
 							}
 							elseif($ext=='mp4'or$ext=='webm')
 							{
-								exec("ffmpeg -ss 00:00:01 -i $imgck/$imagedir/$name -vframes 1 $imgck/$thumbdir/$thumb_name");
+								exec("ffmpeg -ss 00:00:00 -i $imgck/$imagedir/$name -vframes 1 $imgck/$thumbdir/$thumb_name");
 								$image = new Imagick("$imgck/$thumbdir/$thumb_name");
 								$image->setImageCompressionQuality(0);
 								$image->stripImage();
@@ -214,8 +222,8 @@
 
 
 ?>
-<form action="edit-post.php" method="GET">
-Tags:<br /><textarea id="inbox" name="new" rows="10" cols="40">
+<form action="edit-post.php" method="POST">
+Tags:<br /><textarea name="new" rows="10" cols="40">
 <?php
     echo "$tags</textarea><br />\n";
     echo "<input type=\"hidden\" name=\"id\" value=\"$id\" />";
