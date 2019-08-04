@@ -27,11 +27,11 @@
 			$bcknm = $argarray['current_page']-1;
 			echo "p=$bcknm'>◄</a>";
 			for( $i = 4 ; $i > 0 ; $i-- ){
-				echo "<a id='button-light-1' href='$argarray[php]?";
 				$bcknm = $argarray['current_page']-$i;
 				if($bcknm <= 0){
 					continue;
 				}
+				echo "<a id='button-light-1' href='$argarray[php]?";
 				foreach($argarray['get'] as $var => $val){
 					if($var=='p'){
 					
