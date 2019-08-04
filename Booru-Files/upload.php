@@ -63,8 +63,8 @@
 	</form>
 	<?php
 	  }
-		$check = array('<b>','</b>','<i>','</i>','<br />','	','    ',"\n","\r\n");
-		$sub = array('[b]','[/b]','[i]','[/i]','[br]','[t]','[t]','[br]','[br]');
+		$check = array('<b>','</b>','<i>','</i>','<br />','	','    ',"\n","\r\n","'","\\","/");
+		$sub = array('[b]','[/b]','[i]','[/i]','[br]','[t]','[t]','[br]','[br]',"''","\\\\","\/");
 		if(isset($_POST['btn-up'])&&isset($_POST['rating'])){
 
 			$total = count($_FILES['file']['name']);
