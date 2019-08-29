@@ -54,15 +54,11 @@
     $query = "SELECT * FROM `postdata` WHERE `idnum` = '$id' LIMIT 1";
     $result = mysqli_query($link , $query) or die(mysqli_error($link));
     $row = mysqli_fetch_array($result);
-	$dataquery = "SELECT * FROM `postdata` WHERE `idnum` = '$id' LIMIT 1";
-	$datares = mysqli_query($link , $dataquery) or die(mysqli_error($link));
-	$datarow = mysqli_fetch_array($datares);
 	$filename = $row['hash'];
 	$thumbname = $row['thumb'];
-	$filetype = $datarow['type'];
+	$filetype = $row['type'];
     if(isset($_GET['s'])) {
       if($_GET['s'] != 1) {
-        $tags = $row['tag'];
         echo "Are You Sure You Want To Delete This Post?<br />\n";
         echo "<a href=\"remove.php?id=$filename&s=1\">Yes</a> <a href=\"search-post.php?q=\">No</a><br />\n";
         echo "<img src=\"$imagedir/$filename\" alt=\"$tag\" title=\"$id\"><br />\n";
@@ -90,9 +86,8 @@
 			}
 
 		}
-    map_tags($id,'$tags',$link,$metaterms,'REMOVE');
         $querypost = "DELETE FROM `postdata` WHERE `idnum` = '$id' LIMIT 1 ";
-		 $querydata = "DELETE FROM tagmap WHERE post_id = '$id'";
+		$querydata = "DELETE FROM tagmap WHERE post_id = '$id'";
         mysqli_query($link , $querypost) or die(mysqli_error($link));
 		mysqli_query($link , $querydata) or die(mysqli_error($link));
 
